@@ -1,0 +1,23 @@
+@startuml
+title Cas d'utilisation - Recruteur
+skinparam actorStyle awesome
+
+actor "Utilisateur" as U
+actor "Recruteur" as R
+U <|-- R
+
+rectangle "Espace Recruteur" {
+    (Demander accès Recruteur) as Req
+    (Gérer les offres) as Jobs
+    (Publier/Modifier/Prolonger) as JobEdit
+    (Suivre les candidatures) as Review
+    (Télécharger dossiers) as Download
+
+    U --> Req
+    R --> Jobs
+    R --> Review
+    
+    JobEdit --|> Jobs : <<extend>>
+    Download --|> Review : <<extend>>
+}
+@enduml

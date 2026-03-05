@@ -1,0 +1,26 @@
+@startuml
+title Cas d'utilisation - Candidat
+skinparam actorStyle awesome
+
+actor "Visiteur" as V
+actor "Candidat" as C
+V <|-- C
+
+rectangle "Espace Candidat" {
+    (Créer un compte / Se connecter) as Auth
+    (Rechercher & Filtrer les offres) as Search
+    (Consulter le détail) as View
+    (Postuler à une offre) as Apply
+    (Gérer ses candidatures) as Manage
+    
+    V --> Search
+    V --> View
+    V --> Auth
+    
+    C --> Apply
+    C --> Manage
+    
+    Apply ..> Auth : <<include>>
+    Manage ..> Auth : <<include>>
+}
+@enduml

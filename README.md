@@ -4,8 +4,7 @@
 
 Livrable : Les cas d’utilisation, Conception (MCD,MLD), Une carte de votre site web et un prototype de l’IHM
 
-Pour use case faire tableau du cours. 
-
+Pour use case faire tableau du cours + code  planttext voir https://www.planttext.com/
 
 
 ## Getting started

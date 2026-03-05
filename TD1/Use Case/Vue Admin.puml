@@ -1,0 +1,24 @@
+@startuml
+title Cas d'utilisation - Administration
+skinparam actorStyle awesome
+
+actor "Utilisateur" as U
+actor "Administrateur" as A
+U <|-- A
+
+rectangle "Espace Administration" {
+    (Soumettre une organisation) as OrgReq
+    (Gérer les organisations) as OrgVal
+    (Gérer les accès recruteurs) as RecVal
+    (Gérer les utilisateurs & rôles) as UserMgmt
+    (Voir historiques) as History
+
+    U --> OrgReq
+    A --> OrgVal
+    A --> RecVal
+    A --> UserMgmt
+    
+    History ..> OrgVal : <<extend>>
+    History ..> RecVal : <<extend>>
+}
+@enduml
