@@ -1,5 +1,11 @@
 # TD1-CdC
 
+## TD 1
+
+Livrable : Les cas d’utilisation, Conception (MCD,MLD), Une carte de votre site web et un prototype de l’IHM
+
+Pour use case faire tableau du cours. 
+
 
 
 ## Getting started
