@@ -1,0 +1,142 @@
+@startuml
+hide circle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+entity "utilisateur" as utilisateur {
+  * idUtilisateur : int <<PK>>
+  --
+  nom : String
+  prenom : String
+  email : String <<UK>>
+  motDePasseHash : String
+  telephone : String
+  dateCreation : DateTime
+  statutCompte : String
+}
+
+entity "candidat" as candidat {
+  * idCandidat : int <<PK, FK>>
+}
+
+entity "recruteur" as recruteur {
+  * idRecruteur : int <<PK, FK>>
+  --
+  sirenOrganisation : String <<FK>>
+}
+
+entity "administrateur" as administrateur {
+  * idAdministrateur : int <<PK, FK>>
+}
+
+entity "demande_organisation" as demande_organisation {
+  * idDemandeOrganisation : int <<PK>>
+  --
+  sirenPropose : String
+  nomPropose : String
+  typePropose : String
+  siegePropose : String
+  dateDemande : Date
+  statutDemande : String
+  idCandidat : int <<FK>>
+  idAdministrateur : int <<FK>>
+}
+
+entity "organisation" as organisation {
+  * siren : String <<PK>>
+  --
+  nom : String
+  type : String
+  siegeSocial : String
+  idDemandeOrganisationSource : int <<FK, UK>>
+}
+
+entity "demande_recruteur" as demande_recruteur {
+  * idDemandeRecruteur : int <<PK>>
+  --
+  dateDemande : Date
+  statutDemande : String
+  idCandidat : int <<FK>>
+  sirenOrganisation : String <<FK>>
+  idAdministrateur : int <<FK>>
+}
+
+entity "fiche_poste" as fiche_poste {
+  * idFichePoste : int <<PK>>
+  --
+  intitule : String
+  statutPoste : String
+  responsableHierarchique : String
+  typeMetier : String
+  lieuMission : String
+  rythme : String
+  fourchetteSalaire : String
+  missionsActivites : String
+  competencesAttendues : String
+  sirenOrganisation : String <<FK>>
+}
+
+entity "offre_emploi" as offre_emploi {
+  * idOffre : int <<PK>>
+  --
+  dateCreation : Date
+  datePublication : Date
+  dateValidite : Date
+  statutOffre : String
+  piecesDemandees : String
+  nbPiecesDemandees : int
+  sirenOrganisation : String <<FK>>
+  idRecruteur : int <<FK>>
+  idFichePoste : int <<FK>>
+}
+
+entity "candidature" as candidature {
+  * idCandidature : int <<PK>>
+  --
+  dateCandidature : Date
+  etatCandidature : String
+  idCandidat : int <<FK>>
+  idOffre : int <<FK>>
+}
+
+entity "document_candidature" as document_candidature {
+  * idDocument : int <<PK>>
+  --
+  nomFichier : String
+  typeDocument : String
+  cheminStockage : String
+  dateDepot : Date
+  idCandidature : int <<FK>>
+}
+
+utilisateur ||--o| candidat : a_pour_role
+utilisateur ||--o| recruteur : a_pour_role
+utilisateur ||--o| administrateur : a_pour_role
+
+candidat ||--o{ demande_organisation : soumet
+administrateur |o--o{ demande_organisation : traite
+demande_organisation ||--o| organisation : cree_si_validee
+
+candidat ||--o{ demande_recruteur : soumet
+organisation ||--o{ demande_recruteur : est_visee_par
+administrateur |o--o{ demande_recruteur : traite
+
+organisation ||--o{ fiche_poste : possede
+fiche_poste ||--o{ offre_emploi : repose_sur
+organisation ||--o{ recruteur : rattache
+organisation ||--o{ offre_emploi : publie
+recruteur ||--o{ offre_emploi : cree
+
+candidat ||--o{ candidature : depose
+offre_emploi ||--o{ candidature : recoit
+candidature ||--o{ document_candidature : contient
+
+note bottom of candidature
+Contrainte metier :
+UNIQUE(idCandidat, idOffre)
+Un candidat ne peut pas candidater
+deux fois a la meme offre.
+end note
+
+@enduml
