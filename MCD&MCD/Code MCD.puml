@@ -84,9 +84,14 @@ class DemandeRecruteur {
 class FichePoste {
   - idFichePoste : int
   - intitule : String
-  - mission : String
-  - competences : String
-  - piecesDemandees : String
+  - statutPoste : String
+  - responsableHierarchique : String
+  - typeMetier : String
+  - lieuMission : String
+  - rythme : String
+  - fourchetteSalaire : String
+  - missionsActivites : String
+  - competencesAttendues : String
   --
   + creerFiche()
   + modifierFiche()
@@ -98,8 +103,8 @@ class OffreEmploi {
   - datePublication : Date
   - dateValidite : Date
   - statutOffre : String
-  - localisation : String
-  - salaire : Decimal
+  - piecesDemandees : String
+  - nbPiecesDemandees : int
   --
   + creerOffre()
   + publier()
@@ -173,6 +178,24 @@ end note
 note top of Administrateur
 Un compte administrateur est cree
 par defaut au demarrage de l'application.
+end note
+
+note top of Utilisateur
+Specialisation exclusive :
+un utilisateur est soit Candidat,
+soit Recruteur, soit Administrateur.
+end note
+
+note right of OffreEmploi
+statutOffre :
+non publiee / publiee / expiree
+end note
+
+note bottom of Candidature
+Contrainte :
+un candidat ne peut pas candidater
+deux fois a la meme offre.
+Unicite sur (Candidat, OffreEmploi)
 end note
 
 @enduml
