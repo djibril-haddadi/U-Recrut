@@ -1,26 +1,38 @@
 @startuml
-title Cas d'utilisation - Candidat
+title Espace Candidat & Services
+left to right direction
 skinparam actorStyle awesome
 
-actor "Visiteur" as V
 actor "Candidat" as C
-V <|-- C
+usecase "S'identifier (Login)" as Auth
 
 rectangle "Espace Candidat" {
-    (Créer un compte / Se connecter) as Auth
-    (Rechercher & Filtrer les offres) as Search
-    (Consulter le détail) as View
-    (Postuler à une offre) as Apply
-    (Gérer ses candidatures) as Manage
+    usecase "Lister les offres" as L
+    usecase "Filtrer / Trier les offres" as F
+    usecase "Rechercher une offre" as S
+    usecase "Consulter le détail" as D
+    usecase "Candidater à une offre" as A
+    usecase "Voir mes candidatures" as M
+    usecase "Modifier une candidature" as E
     
-    V --> Search
-    V --> View
-    V --> Auth
-    
-    C --> Apply
-    C --> Manage
-    
-    Apply ..> Auth : <<include>>
-    Manage ..> Auth : <<include>>
+    usecase "Demander accès Recruteur" as ReqR
+    usecase "Soumettre une Organisation" as ReqO
 }
+
+C --> L
+C --> F
+C --> S
+C --> D
+C --> A
+C --> M
+C --> E
+C --> ReqR
+C --> ReqO
+
+' Relations de dépendance
+A ..> Auth : <<include>>
+M ..> Auth : <<include>>
+ReqR ..> Auth : <<include>>
+ReqO ..> Auth : <<include>>
+E --|> M : <<extend>>
 @enduml

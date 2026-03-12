@@ -1,24 +1,23 @@
 @startuml
-title Cas d'utilisation - Administration
+title Espace Administration - Modération & Système
+left to right direction
 skinparam actorStyle awesome
 
-actor "Utilisateur" as U
 actor "Administrateur" as A
-U <|-- A
 
-rectangle "Espace Administration" {
-    (Soumettre une organisation) as OrgReq
-    (Gérer les organisations) as OrgVal
-    (Gérer les accès recruteurs) as RecVal
-    (Gérer les utilisateurs & rôles) as UserMgmt
-    (Voir historiques) as History
-
-    U --> OrgReq
-    A --> OrgVal
-    A --> RecVal
-    A --> UserMgmt
-    
-    History ..> OrgVal : <<extend>>
-    History ..> RecVal : <<extend>>
+rectangle "Organisation & Administration" {
+    usecase "Valider / Refuser une organisation" as ValOrg
+    usecase "Voir historique demandes organisation" as HistOrg
+    usecase "Valider / Refuser demande recruteur" as ValRec
+    usecase "Gérer les utilisateurs" as Users
+    usecase "Attribuer le rôle administrateur" as RoleA
 }
+
+A --> ValOrg
+A --> HistOrg
+A --> ValRec
+A --> Users
+A --> RoleA
+
+HistOrg ..> ValOrg : <<extend>>
 @enduml

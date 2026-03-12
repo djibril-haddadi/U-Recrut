@@ -1,23 +1,31 @@
 @startuml
-title Cas d'utilisation - Recruteur
+title Espace Recruteur - Gestion Complète
+left to right direction
 skinparam actorStyle awesome
 
-actor "Utilisateur" as U
 actor "Recruteur" as R
-U <|-- R
 
-rectangle "Espace Recruteur" {
-    (Demander accès Recruteur) as Req
-    (Gérer les offres) as Jobs
-    (Publier/Modifier/Prolonger) as JobEdit
-    (Suivre les candidatures) as Review
-    (Télécharger dossiers) as Download
-
-    U --> Req
-    R --> Jobs
-    R --> Review
-    
-    JobEdit --|> Jobs : <<extend>>
-    Download --|> Review : <<extend>>
+rectangle "Gestion des Offres & Candidats" {
+    usecase "Accéder à l'écran recruteur" as Dash
+    usecase "Créer une offre d'emploi" as Create
+    usecase "Publier une offre" as Publish
+    usecase "Modifier une offre" as Edit
+    usecase "Supprimer une offre" as Delete
+    usecase "Prolonger la validité" as Extend
+    usecase "Lister les offres (Valides/Expirées)" as List
+    usecase "Voir les candidatures reçues" as ViewApp
+    usecase "Télécharger les dossiers (CV/LM)" as Down
 }
+
+R --> Dash
+R --> Create
+R --> Publish
+R --> Edit
+R --> Delete
+R --> Extend
+R --> List
+R --> ViewApp
+R --> Down
+
+Publish ..> Create : <<extend>>
 @enduml

@@ -1,30 +1,28 @@
 @startuml
-title Application de Recrutement - Vue d'ensemble
+title Application de Recrutement - Authentification & Vue d'ensemble
 left to right direction
 skinparam actorStyle awesome
 
-actor "Visiteur / Utilisateur" as U
+actor "Visiteur" as V
+actor "Utilisateur" as U
 actor "Candidat" as C
 actor "Recruteur" as R
 actor "Administrateur" as A
 
+V <|-- U
 U <|-- C
 U <|-- R
 U <|-- A
 
-rectangle "Système de Recrutement" {
-    usecase "Gérer son compte & Auth" as UC_AUTH
-    usecase "Rechercher & Consulter Offres" as UC_SEARCH
-    usecase "Postuler aux offres" as UC_APPLY
-    usecase "Gérer le cycle de vie des offres" as UC_OFFERS
-    usecase "Gérer les candidatures reçues" as UC_RECRUIT
-    usecase "Administration & Validations" as UC_ADMIN
+rectangle "Système d'Authentification" {
+    usecase "Créer un compte" as UC_REG
+    usecase "Se connecter" as UC_LOGIN
+    usecase "Se déconnecter" as UC_LOGOUT
 }
 
-U --> UC_AUTH
-U --> UC_SEARCH
-C --> UC_APPLY
-R --> UC_OFFERS
-R --> UC_RECRUIT
-A --> UC_ADMIN
+V --> UC_REG
+U --> UC_LOGIN
+U --> UC_LOGOUT
+
+note right of U : L'utilisateur connecté accède\naux fonctionnalités spécifiques\nselon son rôle (C, R, A).
 @enduml
