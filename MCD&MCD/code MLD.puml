@@ -10,6 +10,9 @@ entity "Utilisateur" as utilisateur {
   email : varchar [UK]
   motDePasseHash : varchar
   telephone : varchar
+  adresse : varchar
+  codePostal : varchar
+  ville : varchar
   dateCreation : datetime
   statutCompte : varchar
 }
@@ -121,6 +124,26 @@ recruteur ||--o{ offre_emploi : cree
 candidat ||--o{ candidature : depose
 offre_emploi ||--o{ candidature : recoit
 candidature ||--o{ document_candidature : contient
+
+note top of utilisateur
+Contrainte metier :
+un utilisateur possede un seul role actif
+parmi candidat, recruteur, administrateur.
+Les attributs adresse / codePostal / ville
+permettent notamment le tri par distance.
+end note
+
+note right of demande_organisation
+idAdministrateur nullable :
+la demande peut ne pas encore
+etre traitee.
+end note
+
+note right of demande_recruteur
+idAdministrateur nullable :
+la demande peut ne pas encore
+etre traitee.
+end note
 
 note bottom of candidature
 UNIQUE(idCandidat, idOffre)
