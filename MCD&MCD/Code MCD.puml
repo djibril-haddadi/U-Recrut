@@ -11,6 +11,9 @@ class Utilisateur {
   - email : String
   - motDePasseHash : String
   - telephone : String
+  - adresse : String
+  - codePostal : String
+  - ville : String
   - dateCreation : DateTime
   - statutCompte : String
   --
@@ -184,6 +187,8 @@ note top of Utilisateur
 Specialisation exclusive :
 un utilisateur est soit Candidat,
 soit Recruteur, soit Administrateur.
+Les attributs adresse / codePostal / ville
+permettent notamment le tri par distance.
 end note
 
 note right of OffreEmploi
@@ -196,6 +201,14 @@ Contrainte :
 un candidat ne peut pas candidater
 deux fois a la meme offre.
 Unicite sur (Candidat, OffreEmploi)
+end note
+
+note bottom of Utilisateur
+Notifications par mail envoyees lors :
+- creation du compte
+- validation d'une demande d'organisation
+- validation d'une demande recruteur
+- attribution des droits administrateur
 end note
 
 @enduml
