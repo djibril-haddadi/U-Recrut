@@ -1,113 +1,103 @@
 @startuml
-hide circle
 skinparam linetype ortho
-skinparam classAttributeIconSize 0
 skinparam shadowing false
+skinparam classAttributeIconSize 10
 
-entity "utilisateur" as utilisateur {
-  * idUtilisateur : int <<PK>>
-  --
-  nom : String
-  prenom : String
-  email : String <<UK>>
-  motDePasseHash : String
-  telephone : String
-  dateCreation : DateTime
-  statutCompte : String
+entity "Utilisateur" as utilisateur {
+  idUtilisateur : int [PK]
+  nom : varchar
+  prenom : varchar
+  email : varchar [UK]
+  motDePasseHash : varchar
+  telephone : varchar
+  dateCreation : datetime
+  statutCompte : varchar
 }
 
-entity "candidat" as candidat {
-  * idCandidat : int <<PK, FK>>
+entity "Candidat" as candidat {
+  idCandidat : int [PK] [FK]
 }
 
-entity "recruteur" as recruteur {
-  * idRecruteur : int <<PK, FK>>
-  --
-  sirenOrganisation : String <<FK>>
+entity "Recruteur" as recruteur {
+  idRecruteur : int [PK] [FK]
+  sirenOrganisation : varchar [FK]
 }
 
-entity "administrateur" as administrateur {
-  * idAdministrateur : int <<PK, FK>>
+entity "Administrateur" as administrateur {
+  idAdministrateur : int [PK] [FK]
 }
 
-entity "demande_organisation" as demande_organisation {
-  * idDemandeOrganisation : int <<PK>>
-  --
-  sirenPropose : String
-  nomPropose : String
-  typePropose : String
-  siegePropose : String
-  dateDemande : Date
-  statutDemande : String
-  idCandidat : int <<FK>>
-  idAdministrateur : int <<FK>>
+entity "DemandeOrganisation" as demande_organisation {
+  idDemandeOrganisation : int [PK]
+  sirenPropose : varchar
+  nomPropose : varchar
+  typePropose : varchar
+  siegePropose : varchar
+  dateDemande : date
+  statutDemande : varchar
+  idCandidat : int [FK]
+  idAdministrateur : int [FK]
 }
 
-entity "organisation" as organisation {
-  * siren : String <<PK>>
-  --
-  nom : String
-  type : String
-  siegeSocial : String
-  idDemandeOrganisationSource : int <<FK, UK>>
+entity "Organisation" as organisation {
+  siren : varchar [PK]
+  nom : varchar
+  type : varchar
+  siegeSocial : varchar
+  idDemandeOrganisationSource : int [FK] [UK]
 }
 
-entity "demande_recruteur" as demande_recruteur {
-  * idDemandeRecruteur : int <<PK>>
-  --
-  dateDemande : Date
-  statutDemande : String
-  idCandidat : int <<FK>>
-  sirenOrganisation : String <<FK>>
-  idAdministrateur : int <<FK>>
+entity "DemandeRecruteur" as demande_recruteur {
+  idDemandeRecruteur : int [PK]
+  dateDemande : date
+  statutDemande : varchar
+  idCandidat : int [FK]
+  sirenOrganisation : varchar [FK]
+  idAdministrateur : int [FK]
 }
 
-entity "fiche_poste" as fiche_poste {
-  * idFichePoste : int <<PK>>
-  --
-  intitule : String
-  statutPoste : String
-  responsableHierarchique : String
-  typeMetier : String
-  lieuMission : String
-  rythme : String
-  fourchetteSalaire : String
-  missionsActivites : String
-  competencesAttendues : String
-  sirenOrganisation : String <<FK>>
+entity "FichePoste" as fiche_poste {
+  idFichePoste : int [PK]
+  intitule : varchar
+  statutPoste : varchar
+  responsableHierarchique : varchar
+  typeMetier : varchar
+  lieuMission : varchar
+  rythme : varchar
+  fourchetteSalaire : varchar
+  missionsActivites : text
+  competencesAttendues : text
+  sirenOrganisation : varchar [FK]
 }
 
-entity "offre_emploi" as offre_emploi {
-  * idOffre : int <<PK>>
-  --
-  dateCreation : Date
-  datePublication : Date
-  dateValidite : Date
-  statutOffre : String
-  piecesDemandees : String
+entity "OffreEmploi" as offre_emploi {
+  idOffre : int [PK]
+  dateCreation : date
+  datePublication : date
+  dateValidite : date
+  statutOffre : varchar
+  piecesDemandees : text
   nbPiecesDemandees : int
-  sirenOrganisation : String <<FK>>
-  idRecruteur : int <<FK>>
-  idFichePoste : int <<FK>>
+  sirenOrganisation : varchar [FK]
+  idRecruteur : int [FK]
+  idFichePoste : int [FK]
 }
 
-entity "candidature" as candidature {
-  * idCandidature : int <<PK>>
-  --
-  dateCandidature : Date
-  etatCandidature : String
-  idCandidat : int <<FK>>
-  idOffre : int <<FK>>
+entity "Candidature" as candidature {
+  idCandidature : int [PK]
+  dateCandidature : date
+  etatCandidature : varchar
+  idCandidat : int [FK]
+  idOffre : int [FK]
 }
 
-entity "document_candidature" as document_candidature {
-  * idDocument : int <<PK>>
-  --
-  nomFichier : String
-  typeDocument : String
-  cheminStockage : String
-  dateDepot : Date
-  idCandidature : int <<FK>>
+entity "DocumentCandidature" as document_candidature {
+  idDocument : int [PK]
+  nomFichier : varchar
+  typeDocument : varchar
+  cheminStockage : varchar
+  dateDepot : date
+  idCandidature : int [FK]
 }
 
 utilisateur ||--o| candidat : a_pour_role
@@ -133,10 +123,7 @@ offre_emploi ||--o{ candidature : recoit
 candidature ||--o{ document_candidature : contient
 
 note bottom of candidature
-Contrainte metier :
 UNIQUE(idCandidat, idOffre)
-Un candidat ne peut pas candidater
-deux fois a la meme offre.
 end note
 
 @enduml
