@@ -138,8 +138,9 @@ OffreEmploi "1" -- "0..*" Candidature : recoit
 Candidature "1" -- "0..*" DocumentCandidature : contient
 
 Organisation "1" -- "0..*" OffreEmploi : publie
+Organisation "1" -- "0..*" FichePoste : possede
 Recruteur "1" -- "0..*" OffreEmploi : cree / gere
-OffreEmploi "1" -- "1" FichePoste : repose sur
+OffreEmploi "0..*" -- "1" FichePoste : repose sur
 
 Recruteur "0..*" -- "1" Organisation : est rattache a
 
