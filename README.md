@@ -1,98 +1,171 @@
-# TD1-CdC
+# 🎯 U-Recrut — *Votre Talent, Notre Connection*
 
-## TD 1
+> Projet académique réalisé dans le cadre du cours **GI02 / AI16** — UTC  
+> Livrable TD1
 
-Livrable : Les cas d’utilisation, Conception (MCD,MLD), Une carte de votre site web et un prototype de l’IHM
+---
 
-Pour use case faire tableau du cours + code  planttext voir https://www.planttext.com/
+## 📋 Table des matières
 
+1. [Présentation du projet](#présentation-du-projet)
+2. [Structure du dépôt](#structure-du-dépôt)
+3. [Livrables](#livrables)
+   - [Cas d'utilisation](#1-cas-dutilisation)
+   - [Conception — MCD & MLD](#2-conception--mcd--mld)
+   - [Sitemap & Prototype IHM](#3-sitemap--prototype-ihm)
+4. [Identité visuelle](#identité-visuelle)
+5. [Équipe](#équipe)
 
-## Getting started
+---
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Présentation du projet
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+**U-Recrut** est une application web de recrutement conçue pour mettre en relation candidats et recruteurs au sein d'organisations validées. Elle s'articule autour de trois rôles principaux :
 
-## Add your files
+| Rôle | Description |
+|------|-------------|
+| 👤 **Candidat** | Consulte et postule aux offres d'emploi, suit l'état de ses candidatures |
+| 🏢 **Recruteur** | Publie et gère des offres, examine les candidatures reçues |
+| ⚙️ **Administrateur** | Valide les organisations et les accès recruteurs, modère la plateforme |
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+---
+
+## Structure du dépôt
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.utc.fr/ai16_gtd/td1-cdc.git
-git branch -M main
-git push -uf origin main
+td1-cdc/
+│
+├── Maquette/
+│   ├── asset/
+│   │   └── image.png              # Logo U-Recrut (versions claire & sombre)
+│   └── u-recrut.html              # Prototype IHM interactif (HTML / Tailwind CSS)
+│
+├── TD1/
+│   ├── MCD&MCD/
+│   │   ├── Shema/
+│   │   │   ├── MCD.png            # Diagramme MCD (export image)
+│   │   │   └── MLD.png            # Diagramme MLD (export image)
+│   │   ├── Code MCD.puml          # Source PlantUML du MCD
+│   │   └── code MLD.puml          # Source PlantUML du MLD
+│   │
+│   └── Use Case/
+│       ├── Shema/
+│       │   ├── Cas d'utilisation - Administration.png
+│       │   ├── Cas d'utilisation - Candidat.png
+│       │   ├── Cas d'utilisation - Recruteur.png
+│       │   └── Vue d'ensemble.png
+│       ├── Diagramme Général.puml
+│       ├── Vue Admin.puml
+│       ├── Vue Candidat.puml
+│       └── Vue Recruteur.puml
+│
+├── SiteMap.png                    # Carte de navigation du site web
+├── Tableau_fonctionnalites_AI16.pdf
+├── TD 1 SR10.pdf                  # Énoncé du TD
+├── Doc_aide_sr10_docx.pdf         # Documentation d'aide
+├── README.md
+└── .gitignore
 ```
 
-## Integrate with your tools
+---
 
-* [Set up project integrations](https://gitlab.utc.fr/ai16_gtd/td1-cdc/-/settings/integrations)
+## Livrables
 
-## Collaborate with your team
+### 1. Cas d'utilisation
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+Les diagrammes de cas d'utilisation ont été modélisés avec **PlantUML** et décrivent les interactions entre les acteurs et le système pour chaque rôle.
 
-## Test and Deploy
+#### Acteurs identifiés
 
-Use the built-in continuous integration in GitLab.
+- **Visiteur** — accède à l'accueil public et aux offres sans se connecter
+- **Candidat** — crée un compte, postule et suit ses candidatures
+- **Recruteur** — publie des offres et gère les candidatures reçues
+- **Administrateur** — valide les organisations et supervise la plateforme
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+#### Diagrammes disponibles
 
-***
+| Fichier | Description |
+|---------|-------------|
+| `Diagramme Général.puml` | Vue d'ensemble de tous les acteurs |
+| `Vue Candidat.puml` | Cas d'utilisation spécifiques au candidat |
+| `Vue Recruteur.puml` | Cas d'utilisation spécifiques au recruteur |
+| `Vue Admin.puml` | Cas d'utilisation spécifiques à l'administrateur |
 
-# Editing this README
+> 📁 Les exports PNG se trouvent dans `TD1/Use Case/Shema/`
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+---
 
-## Suggestions for a good README
+### 2. Conception — MCD & MLD
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+La conception de la base de données a suivi le processus suivant :
 
-## Name
-Choose a self-explaining name for your project.
+```
+Analyse du cahier des charges
+        ↓
+Diagramme de classes (orienté objet)
+        ↓
+MCD — Modèle Conceptuel de Données
+        ↓
+MLD — Modèle Logique de Données (schéma relationnel)
+```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Les sources PlantUML (`Code MCD.puml`, `code MLD.puml`) permettent de régénérer les diagrammes à tout moment.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+> 📁 Les exports PNG se trouvent dans `TD1/MCD&MCD/Shema/`
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+---
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### 3. Sitemap & Prototype IHM
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+#### Sitemap
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Le fichier `SiteMap.png` (racine du dépôt) présente la structure de navigation complète du site et les liens entre les différentes pages selon le rôle de l'utilisateur connecté.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+#### Prototype IHM — `u-recrut.html`
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Le prototype est une **Single Page Application** interactive développée avec **HTML + Tailwind CSS + JavaScript vanilla**. Il simule l'intégralité du flux de navigation pour la présentation.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+**Vues incluses :**
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+| Vue | Contenu |
+|-----|---------|
+| 🏠 Accueil public | Barre de recherche héro, filtres latéraux, grille de cartes d'offres |
+| 🔐 Connexion / Inscription | Formulaire avec onglets, connexion OAuth simulée |
+| 👤 Dashboard Candidat | KPIs, tableau des candidatures avec badges de statut, offres recommandées |
+| 🏢 Dashboard Recruteur | Statistiques de vues, gestion des offres (Modifier / Prolonger / Supprimer), liste des candidats |
+| ⚙️ Dashboard Admin | Validation des organisations, accès recruteurs, modération des signalements |
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+**Pour ouvrir le prototype :**
+```bash
+# Ouvrir directement dans un navigateur
+open Maquette/u-recrut.html
 
-## License
-For open source projects, say how it is licensed.
+# Ou via un serveur local
+cd Maquette && python3 -m http.server 8080
+# Puis naviguer sur http://localhost:8080/u-recrut.html
+```
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+---
+
+## Identité visuelle
+
+| Élément | Valeur |
+|---------|--------|
+| **Couleur principale** | Jaune Or `#FFCD00` |
+| **Couleur de structure** | Gris Anthracite `#4D4D4D` |
+| **Fond de page** | Gris très clair `#F8F9FA` |
+| **Typographie** | Outfit (Sans-Serif moderne) |
+| **Coins arrondis** | 12px |
+| **Slogan** | *Votre Talent, Notre Connection* |
+
+> Le logo est disponible en version claire et sombre dans `Maquette/asset/image.png`
+
+---
+
+## Équipe
+
+Projet réalisé par le **Hérald NKOUNKOU et Djibril Haddadi** dans le cadre du cours GI02 — Université de Technologie de Compiègne (UTC).
+
+---
+
+*Dernière mise à jour : mars 2026*
