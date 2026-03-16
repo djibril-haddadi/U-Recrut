@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>U-Recrut — Votre Talent, Notre Connection</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Lora:ital,wght@0,600;1,500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          gold: { 50:'#FFFBEB', 100:'#FFF3C4', 200:'#FFE57A', 300:'#FFD740', DEFAULT:'#FFCD00', 500:'#F5C200', 600:'#D4A800', 700:'#A67F00' },
+          anthracite: { 50:'#F8F9FA', 100:'#EAECEF', 200:'#D1D5DB', 300:'#9CA3AF', 400:'#6B7280', DEFAULT:'#4D4D4D', 600:'#3A3A3A', 700:'#2C2C2C', 800:'#1E1E1E', 900:'#111111' },
+        },
+        fontFamily: { outfit: ['Outfit','sans-serif'], lora: ['Lora','serif'] },
+        borderRadius: { xl2: '12px', xl3: '18px', xl4: '24px' },
+        boxShadow: {
+          card: '0 2px 12px rgba(0,0,0,0.07)',
+          hover: '0 8px 28px rgba(0,0,0,0.12)',
+          gold: '0 4px 20px rgba(255,205,0,0.35)',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Outfit', sans-serif; background: #F8F9FA; color: #4D4D4D; min-height: 100vh; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #F0F0F0; } ::-webkit-scrollbar-thumb { background: #FFCD00; border-radius: 99px; }
+
+  /* Transitions */
+  .view { display: none; animation: fadeUp 0.28s ease both; }
+  .view.active { display: block; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* NAV */
+  .topnav { background:#fff; border-bottom: 2px solid #FFCD00; position:sticky; top:0; z-index:200; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .logo-mark { width:36px; height:36px; background: linear-gradient(135deg,#4D4D4D 60%, #666); border-radius:10px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .logo-mark::after { content:'U'; font-family:'Outfit'; font-weight:900; font-size:1.1rem; color:#FFCD00; }
+  .logo-text { font-family:'Outfit'; font-weight:800; font-size:1.22rem; color:#2C2C2C; letter-spacing:-0.5px; }
+  .logo-text span { color:#FFCD00; }
+  .logo-sub { font-size:0.6rem; color:#9CA3AF; text-transform:uppercase; letter-spacing:1.5px; font-weight:500; line-height:1; }
+
+  /* NAV PILLS */
+  .nav-pill { padding:7px 16px; border-radius:99px; font-size:0.82rem; font-weight:600; cursor:pointer; border:none; background:transparent; color:#6B7280; font-family:'Outfit'; transition:all 0.18s; white-space:nowrap; }
+  .nav-pill:hover { background:#FFF3C4; color:#4D4D4D; }
+  .nav-pill.active { background:#FFCD00; color:#2C2C2C; box-shadow:0 2px 10px rgba(255,205,0,0.4); }
+
+  /* SIDEBAR */
+  .sidebar { width:220px; flex-shrink:0; background:#fff; border-right:1px solid #EAECEF; min-height:calc(100vh - 60px); display:flex; flex-direction:column; padding:20px 0; }
+  .side-item { display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:500; color:#6B7280; cursor:pointer; border-left:3px solid transparent; transition:all 0.15s; }
+  .side-item:hover { background:#FFFBEB; color:#4D4D4D; }
+  .side-item.active { background:#FFFBEB; color:#2C2C2C; border-left-color:#FFCD00; font-weight:700; }
+  .side-item .ico { font-size:1rem; width:22px; text-align:center; }
+  .side-section { font-size:0.68rem; color:#9CA3AF; text-transform:uppercase; letter-spacing:1.5px; padding:16px 20px 6px; font-weight:600; }
+
+  /* HERO */
+  .hero-section { background: linear-gradient(135deg, #2C2C2C 0%, #4D4D4D 55%, #5A5A5A 100%); padding:64px 40px 72px; position:relative; overflow:hidden; }
+  .hero-section::before { content:''; position:absolute; top:-60px; right:-60px; width:320px; height:320px; border-radius:50%; border:70px solid rgba(255,205,0,0.07); }
+  .hero-section::after { content:''; position:absolute; bottom:-80px; left:10%; width:200px; height:200px; border-radius:50%; background:rgba(255,205,0,0.05); }
+  .hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(255,205,0,0.15); border:1px solid rgba(255,205,0,0.3); color:#FFCD00; padding:5px 14px; border-radius:99px; font-size:0.76rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:18px; }
+  .hero-title { font-size:2.6rem; font-weight:900; color:#fff; line-height:1.15; margin-bottom:12px; }
+  .hero-title em { font-style:normal; color:#FFCD00; }
+  .hero-sub { color:rgba(255,255,255,0.65); font-size:1rem; font-weight:300; margin-bottom:36px; }
+
+  /* SEARCH BAR */
+  .search-wrap { background:#fff; border-radius:14px; display:flex; align-items:center; max-width:700px; padding:6px 6px 6px 18px; gap:10px; box-shadow:0 8px 30px rgba(0,0,0,0.2); }
+  .search-wrap input { flex:1; border:none; outline:none; font-family:'Outfit'; font-size:0.94rem; color:#2C2C2C; background:transparent; }
+  .search-wrap input::placeholder { color:#9CA3AF; }
+  .search-divider { width:1px; height:26px; background:#EAECEF; }
+  .search-wrap select { border:none; outline:none; font-family:'Outfit'; font-size:0.88rem; color:#6B7280; background:transparent; padding:0 8px; cursor:pointer; }
+  .btn-gold { background:#FFCD00; color:#2C2C2C; border:none; padding:11px 26px; border-radius:10px; font-family:'Outfit'; font-weight:700; font-size:0.9rem; cursor:pointer; transition:all 0.18s; white-space:nowrap; }
+  .btn-gold:hover { background:#F5C200; box-shadow:0 4px 16px rgba(255,205,0,0.45); transform:translateY(-1px); }
+  .btn-outline-gold { background:transparent; color:#FFCD00; border:2px solid #FFCD00; padding:9px 20px; border-radius:10px; font-family:'Outfit'; font-weight:600; font-size:0.85rem; cursor:pointer; transition:all 0.18s; }
+  .btn-outline-gold:hover { background:#FFCD00; color:#2C2C2C; }
+  .btn-ghost { background:transparent; border:1.5px solid #D1D5DB; color:#4D4D4D; padding:9px 18px; border-radius:10px; font-family:'Outfit'; font-weight:500; font-size:0.85rem; cursor:pointer; transition:all 0.15s; }
+  .btn-ghost:hover { border-color:#9CA3AF; }
+
+  /* CARDS */
+  .card { background:#fff; border-radius:12px; border:1px solid #EAECEF; box-shadow:0 2px 12px rgba(0,0,0,0.05); transition:all 0.2s; cursor:pointer; }
+  .card:hover { box-shadow:0 8px 28px rgba(0,0,0,0.10); transform:translateY(-2px); border-color:#FFE57A; }
+  .card.featured { border-color:#FFE57A; }
+  .card-logo { width:44px; height:44px; border-radius:10px; background:#FFFBEB; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.9rem; color:#D4A800; border:1px solid #FFE57A; }
+
+  /* TAGS */
+  .tag { font-size:0.73rem; font-weight:600; padding:3px 10px; border-radius:99px; }
+  .tag-cdi { background:#FFFBEB; color:#D4A800; }
+  .tag-remote { background:#ECFDF5; color:#065F46; }
+  .tag-stage { background:#EFF6FF; color:#1E40AF; }
+  .tag-alt { background:#F5F3FF; color:#5B21B6; }
+  .tag-exp { background:#FFF1F2; color:#9F1239; }
+  .tag-featured { background:#FFCD00; color:#2C2C2C; }
+
+  /* STATUS BADGES */
+  .badge { display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:99px; font-size:0.75rem; font-weight:700; }
+  .badge-wait { background:#FFFBEB; color:#92400E; }
+  .badge-interview { background:#EFF6FF; color:#1E40AF; }
+  .badge-rejected { background:#FFF1F2; color:#9F1239; }
+  .badge-active { background:#ECFDF5; color:#065F46; }
+  .badge-pending-org { background:#F5F3FF; color:#5B21B6; }
+  .badge-dot { width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+  /* STAT CARDS */
+  .stat-card { background:#fff; border-radius:12px; border:1px solid #EAECEF; padding:20px 22px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .stat-val { font-size:2rem; font-weight:900; color:#2C2C2C; font-family:'Outfit'; }
+  .stat-lbl { font-size:0.76rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px; margin-top:4px; }
+  .stat-card.gold-accent { border-left:4px solid #FFCD00; }
+  .stat-card.green-accent { border-left:4px solid #34D399; }
+  .stat-card.blue-accent { border-left:4px solid #60A5FA; }
+  .stat-card.red-accent { border-left:4px solid #F87171; }
+
+  /* TABLE */
+  .data-table { width:100%; border-collapse:collapse; }
+  .data-table thead th { padding:11px 16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px; background:#F8F9FA; border-bottom:2px solid #EAECEF; }
+  .data-table tbody tr { border-bottom:1px solid #F3F4F6; transition:background 0.12s; }
+  .data-table tbody tr:last-child { border-bottom:none; }
+  .data-table tbody tr:hover { background:#FFFBEB; }
+  .data-table tbody td { padding:13px 16px; font-size:0.86rem; color:#4D4D4D; vertical-align:middle; }
+
+  /* FILTER SIDEBAR */
+  .filter-sidebar { width:250px; flex-shrink:0; }
+  .filter-block { background:#fff; border-radius:12px; border:1px solid #EAECEF; padding:18px 20px; margin-bottom:14px; }
+  .filter-title { font-size:0.78rem; font-weight:700; color:#2C2C2C; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:12px; }
+  .filter-check { display:flex; align-items:center; gap:8px; margin-bottom:7px; cursor:pointer; }
+  .filter-check input { accent-color:#FFCD00; width:15px; height:15px; }
+  .filter-check span { font-size:0.84rem; color:#4D4D4D; }
+  .filter-count { margin-left:auto; font-size:0.72rem; color:#9CA3AF; background:#F3F4F6; padding:1px 7px; border-radius:99px; font-weight:600; }
+  .range-input { width:100%; accent-color:#FFCD00; }
+
+  /* AUTH */
+  .auth-container { min-height:calc(100vh - 60px); display:flex; }
+  .auth-panel-left { width:48%; background:linear-gradient(150deg, #2C2C2C 0%, #4D4D4D 100%); display:flex; flex-direction:column; align-items:flex-start; justify-content:center; padding:64px 60px; position:relative; overflow:hidden; }
+  .auth-panel-left::before { content:''; position:absolute; bottom:-100px; right:-80px; width:350px; height:350px; border-radius:50%; border:80px solid rgba(255,205,0,0.08); }
+  .auth-feature { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+  .auth-feature-icon { width:38px; height:38px; border-radius:10px; background:rgba(255,205,0,0.15); border:1px solid rgba(255,205,0,0.25); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+  .auth-feature span { font-size:0.87rem; color:rgba(255,255,255,0.8); }
+  .auth-panel-right { flex:1; display:flex; align-items:center; justify-content:center; padding:40px; background:#F8F9FA; }
+  .auth-box { background:#fff; border-radius:18px; padding:44px 40px; width:100%; max-width:420px; box-shadow:0 4px 30px rgba(0,0,0,0.08); border:1px solid #EAECEF; }
+  .tab-switch { display:flex; background:#F3F4F6; border-radius:10px; padding:4px; margin-bottom:26px; }
+  .tab-sw-btn { flex:1; padding:9px; text-align:center; border-radius:8px; font-size:0.87rem; cursor:pointer; border:none; background:transparent; color:#6B7280; font-family:'Outfit'; font-weight:500; transition:all 0.18s; }
+  .tab-sw-btn.active { background:#FFCD00; color:#2C2C2C; font-weight:700; box-shadow:0 2px 8px rgba(255,205,0,0.3); }
+  .form-label { display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px; }
+  .form-input { width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#2C2C2C; outline:none; transition:border 0.18s; background:#fff; }
+  .form-input:focus { border-color:#FFCD00; box-shadow:0 0 0 3px rgba(255,205,0,0.12); }
+  .form-select { width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#4D4D4D; background:#fff; outline:none; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; }
+  .form-select:focus { border-color:#FFCD00; }
+  .btn-gold-full { width:100%; padding:13px; background:#FFCD00; color:#2C2C2C; border:none; border-radius:10px; font-family:'Outfit'; font-weight:800; font-size:0.95rem; cursor:pointer; transition:all 0.18s; letter-spacing:0.2px; }
+  .btn-gold-full:hover { background:#F5C200; box-shadow:0 4px 18px rgba(255,205,0,0.45); }
+
+  /* DASH USER CARD */
+  .user-avatar { width:38px; height:38px; border-radius:10px; background:#FFCD00; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:0.9rem; color:#2C2C2C; flex-shrink:0; }
+  .user-avatar.admin { background:#4D4D4D; color:#FFCD00; }
+  .user-avatar.recruiter { background:#FFFBEB; color:#D4A800; border:2px solid #FFE57A; }
+
+  /* PROGRESS */
+  .progress-bar { height:6px; background:#EAECEF; border-radius:99px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:99px; background:#FFCD00; }
+
+  /* ADMIN ALERT */
+  .admin-alert { background:#FFFBEB; border:1.5px solid #FFE57A; border-radius:12px; padding:14px 18px; display:flex; align-items:center; gap:12px; margin-bottom:22px; }
+
+  /* ACTIONS */
+  .btn-xs { padding:5px 11px; border-radius:7px; font-size:0.76rem; font-weight:700; cursor:pointer; font-family:'Outfit'; border:none; transition:all 0.14s; white-space:nowrap; }
+  .btn-xs-gold { background:#FFFBEB; color:#D4A800; }
+  .btn-xs-gold:hover { background:#FFCD00; color:#2C2C2C; }
+  .btn-xs-outline { background:transparent; color:#6B7280; border:1px solid #D1D5DB; }
+  .btn-xs-outline:hover { border-color:#9CA3AF; color:#2C2C2C; }
+  .btn-xs-danger { background:#FFF1F2; color:#9F1239; }
+  .btn-xs-danger:hover { background:#FFE4E6; }
+  .btn-xs-success { background:#ECFDF5; color:#065F46; }
+  .btn-xs-success:hover { background:#D1FAE5; }
+
+  /* DEMO HINT */
+  .demo-hint { position:fixed; bottom:20px; right:20px; background:#2C2C2C; color:#FFCD00; padding:10px 16px; border-radius:10px; font-size:0.79rem; font-weight:600; box-shadow:0 4px 20px rgba(0,0,0,0.25); z-index:500; letter-spacing:0.2px; }
+
+  /* SECTION CARD */
+  .section-card { background:#fff; border-radius:12px; border:1px solid #EAECEF; overflow:hidden; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .section-card-header { padding:16px 22px; border-bottom:1px solid #F3F4F6; display:flex; align-items:center; justify-content:space-between; }
+  .section-card-header h3 { font-size:0.97rem; font-weight:800; color:#2C2C2C; }
+
+  /* PAGINATION */
+  .pag-btn { width:34px; height:34px; border-radius:8px; border:1.5px solid #D1D5DB; background:#fff; color:#6B7280; font-size:0.83rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.14s; font-family:'Outfit'; font-weight:600; }
+  .pag-btn.active { background:#FFCD00; color:#2C2C2C; border-color:#FFCD00; box-shadow:0 2px 10px rgba(255,205,0,0.35); }
+  .pag-btn:hover:not(.active) { border-color:#FFCD00; color:#D4A800; }
+
+  /* CAND MINI */
+  .cand-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid #F3F4F6; }
+  .cand-row:last-child { border-bottom:none; }
+  .cand-av { width:34px; height:34px; border-radius:50%; background:#FFFBEB; border:2px solid #FFE57A; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:800; color:#D4A800; flex-shrink:0; }
+
+  /* NOTIF DOT */
+  .notif-dot { width:8px; height:8px; background:#FFCD00; border-radius:50%; display:inline-block; margin-left:4px; }
+
+  @media(max-width:768px){
+    .hero-title{font-size:1.7rem}
+    .auth-panel-left{display:none}
+    .auth-panel-right{padding:24px 16px}
+    .filter-sidebar{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ TOP NAV ═══════════════════════════════════ -->
+<header class="topnav">
+  <div style="max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:12px;height:60px">
+    <!-- Logo -->
+    <div style="display:flex;align-items:center;gap:10px;margin-right:8px">
+      <div class="logo-mark"></div>
+      <div>
+        <div class="logo-text"><span>U-</span>Recrut</div>
+        <div class="logo-sub">Votre Talent, Notre Connection</div>
+      </div>
+    </div>
+
+    <!-- Nav pills -->
+    <div style="display:flex;gap:4px;flex:1;overflow-x:auto;padding:4px 0">
+      <button class="nav-pill active" onclick="gotoView('home',this)">🏠 Accueil</button>
+      <button class="nav-pill" onclick="gotoView('auth',this)">🔐 Connexion</button>
+      <button class="nav-pill" onclick="gotoView('candidate',this)">👤 Candidat</button>
+      <button class="nav-pill" onclick="gotoView('recruiter',this)">🏢 Recruteur</button>
+      <button class="nav-pill" onclick="gotoView('admin',this)">⚙️ Admin</button>
+    </div>
+
+    <!-- Profile zone -->
+    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <div style="text-align:right;display:none" id="user-info-zone">
+        <div style="font-size:0.83rem;font-weight:700;color:#2C2C2C" id="nav-username">Marie Lambert</div>
+        <div style="font-size:0.7rem;color:#9CA3AF" id="nav-userrole">Candidat</div>
+      </div>
+      <div class="user-avatar" id="nav-avatar" style="display:none">ML</div>
+      <button class="btn-outline-gold" onclick="gotoView('auth',document.querySelectorAll('.nav-pill')[1])">Se connecter</button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<!-- VIEW : ACCUEIL PUBLIC -->
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<div id="view-home" class="view active">
+  <!-- Hero -->
+  <div class="hero-section">
+    <div style="max-width:900px;margin:0 auto;position:relative">
+      <div class="hero-badge">⚡ +12 400 offres actives cette semaine</div>
+      <h1 class="hero-title">Trouvez votre prochaine<br><em>opportunité de carrière</em></h1>
+      <p class="hero-sub">Des milliers d'offres dans les meilleures organisations françaises vous attendent.</p>
+      <div class="search-wrap" style="max-width:680px">
+        <svg width="18" height="18" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="Intitulé, compétence, entreprise…"/>
+        <div class="search-divider"></div>
+        <svg width="16" height="16" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 0 1 9.5 9 2.5 2.5 0 0 1 12 6.5 2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5z" fill="#9CA3AF"/></svg>
+        <select>
+          <option>Toutes les villes</option>
+          <option>Paris</option><option>Lyon</option><option>Marseille</option><option>Toulouse</option><option>Télétravail</option>
+        </select>
+        <button class="btn-gold">🔍 Rechercher</button>
+      </div>
+      <!-- Hero Stats -->
+      <div style="display:flex;gap:32px;margin-top:30px;position:relative">
+        <div style="text-align:center"><div style="font-size:1.4rem;font-weight:900;color:#FFCD00">12 400+</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.6px">Offres actives</div></div>
+        <div style="text-align:center"><div style="font-size:1.4rem;font-weight:900;color:#FFCD00">3 200+</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.6px">Entreprises</div></div>
+        <div style="text-align:center"><div style="font-size:1.4rem;font-weight:900;color:#FFCD00">48 000+</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.6px">Candidats inscrits</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content: filters + cards -->
+  <div style="max-width:1300px;margin:0 auto;padding:32px 24px;display:flex;gap:26px">
+    <!-- FILTER SIDEBAR -->
+    <aside class="filter-sidebar">
+      <div class="filter-block">
+        <div class="filter-title">Type de contrat</div>
+        <label class="filter-check"><input type="checkbox" checked/><span>CDI</span><span class="filter-count">6 214</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>CDD</span><span class="filter-count">2 890</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>Stage</span><span class="filter-count">1 204</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>Alternance</span><span class="filter-count">876</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>Freelance</span><span class="filter-count">654</span></label>
+      </div>
+      <div class="filter-block">
+        <div class="filter-title">Mode de travail</div>
+        <label class="filter-check"><input type="checkbox" checked/><span>Présentiel</span><span class="filter-count">5 100</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>Télétravail</span><span class="filter-count">3 440</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>Hybride</span><span class="filter-count">2 860</span></label>
+      </div>
+      <div class="filter-block">
+        <div class="filter-title">Salaire annuel</div>
+        <input type="range" class="range-input" min="20" max="120" value="65" style="margin:8px 0 4px"/>
+        <div style="display:flex;justify-content:space-between;font-size:0.74rem;color:#9CA3AF;font-weight:600"><span>20k€</span><span>65k€</span><span>120k€</span></div>
+      </div>
+      <div class="filter-block">
+        <div class="filter-title">Expérience</div>
+        <label class="filter-check"><input type="checkbox"/><span>Junior (0–2 ans)</span><span class="filter-count">2 100</span></label>
+        <label class="filter-check"><input type="checkbox" checked/><span>Intermédiaire (2–5)</span><span class="filter-count">4 560</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>Senior (5+ ans)</span><span class="filter-count">3 200</span></label>
+      </div>
+      <div class="filter-block">
+        <div class="filter-title">Secteur</div>
+        <label class="filter-check"><input type="checkbox"/><span>Tech & Logiciel</span><span class="filter-count">3 200</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>Finance</span><span class="filter-count">1 800</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>Santé</span><span class="filter-count">1 400</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>Éducation</span><span class="filter-count">890</span></label>
+        <label class="filter-check"><input type="checkbox"/><span>Marketing</span><span class="filter-count">760</span></label>
+      </div>
+      <button style="width:100%;padding:10px;border:1.5px solid #D1D5DB;background:transparent;border-radius:10px;font-size:0.82rem;color:#6B7280;cursor:pointer;font-family:'Outfit';font-weight:600;transition:all 0.15s" onmouseover="this.style.borderColor='#FFCD00';this.style.color='#D4A800'" onmouseout="this.style.borderColor='#D1D5DB';this.style.color='#6B7280'">↺ Réinitialiser les filtres</button>
+    </aside>
+
+    <!-- JOB CARDS GRID -->
+    <div style="flex:1">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+        <p style="font-size:0.88rem;color:#6B7280"><strong style="color:#2C2C2C">1 248</strong> offres correspondent à votre recherche</p>
+        <select style="border:1.5px solid #D1D5DB;border-radius:8px;padding:7px 12px;font-size:0.84rem;color:#6B7280;font-family:'Outfit';background:#fff;outline:none;cursor:pointer">
+          <option>Plus récentes</option><option>Salaire décroissant</option><option>Pertinence</option>
+        </select>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px">
+
+        <!-- Card 1 FEATURED -->
+        <div class="card featured" style="padding:22px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div class="card-logo">SG</div>
+            <span class="tag tag-featured">⭐ À la une</span>
+          </div>
+          <h3 style="font-size:0.96rem;font-weight:700;color:#1E1E1E;margin-bottom:3px;line-height:1.3">Développeur Full-Stack React/Node</h3>
+          <div style="font-size:0.83rem;color:#9CA3AF;font-weight:500;margin-bottom:10px">Société Générale · Paris 9e</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+            <span class="tag tag-cdi">CDI</span><span class="tag tag-remote">Hybride</span><span class="tag">3–5 ans exp.</span>
+          </div>
+          <div style="font-size:0.8rem;color:#6B7280;margin-bottom:12px">📍 Paris, Île-de-France</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #F3F4F6">
+            <span style="font-size:0.9rem;font-weight:800;color:#D4A800">55–70k€ / an</span>
+            <span style="font-size:0.76rem;color:#9CA3AF">Il y a 2h</span>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card" style="padding:22px">
+          <div class="card-logo" style="margin-bottom:14px">DS</div>
+          <h3 style="font-size:0.96rem;font-weight:700;color:#1E1E1E;margin-bottom:3px;line-height:1.3">Data Scientist — NLP & Machine Learning</h3>
+          <div style="font-size:0.83rem;color:#9CA3AF;font-weight:500;margin-bottom:10px">DataSpark · Lyon</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+            <span class="tag tag-cdi">CDI</span><span class="tag tag-remote">Télétravail</span><span class="tag">2–4 ans exp.</span>
+          </div>
+          <div style="font-size:0.8rem;color:#6B7280;margin-bottom:12px">📍 Lyon / Remote</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #F3F4F6">
+            <span style="font-size:0.9rem;font-weight:800;color:#D4A800">50–65k€ / an</span>
+            <span style="font-size:0.76rem;color:#9CA3AF">Il y a 5h</span>
+          </div>
+        </div>
+
+        <!-- Card 3 FEATURED -->
+        <div class="card featured" style="padding:22px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div class="card-logo">AC</div>
+            <span class="tag tag-featured">⭐ À la une</span>
+          </div>
+          <h3 style="font-size:0.96rem;font-weight:700;color:#1E1E1E;margin-bottom:3px;line-height:1.3">Product Manager — Fintech B2B</h3>
+          <div style="font-size:0.83rem;color:#9CA3AF;font-weight:500;margin-bottom:10px">Accenture · Paris 8e</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+            <span class="tag tag-cdi">CDI</span><span class="tag tag-remote">Hybride</span><span class="tag">5+ ans exp.</span>
+          </div>
+          <div style="font-size:0.8rem;color:#6B7280;margin-bottom:12px">📍 Paris, Île-de-France</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #F3F4F6">
+            <span style="font-size:0.9rem;font-weight:800;color:#D4A800">70–90k€ / an</span>
+            <span style="font-size:0.76rem;color:#9CA3AF">Il y a 1j</span>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card" style="padding:22px">
+          <div class="card-logo" style="margin-bottom:14px">UX</div>
+          <h3 style="font-size:0.96rem;font-weight:700;color:#1E1E1E;margin-bottom:3px;line-height:1.3">UX/UI Designer — Applications mobiles</h3>
+          <div style="font-size:0.83rem;color:#9CA3AF;font-weight:500;margin-bottom:10px">Craft Studio · Bordeaux</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+            <span class="tag tag-cdi">CDI</span><span class="tag tag-remote">Hybride</span><span class="tag">2–5 ans exp.</span>
+          </div>
+          <div style="font-size:0.8rem;color:#6B7280;margin-bottom:12px">📍 Bordeaux / Hybride</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #F3F4F6">
+            <span style="font-size:0.9rem;font-weight:800;color:#D4A800">42–55k€ / an</span>
+            <span style="font-size:0.76rem;color:#9CA3AF">Il y a 2j</span>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="card" style="padding:22px">
+          <div class="card-logo" style="margin-bottom:14px">OG</div>
+          <h3 style="font-size:0.96rem;font-weight:700;color:#1E1E1E;margin-bottom:3px;line-height:1.3">Ingénieur DevOps — Cloud AWS / Kubernetes</h3>
+          <div style="font-size:0.83rem;color:#9CA3AF;font-weight:500;margin-bottom:10px">OgmaTech · Nantes</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+            <span class="tag tag-cdi">CDI</span><span class="tag tag-remote">Télétravail</span><span class="tag">3+ ans exp.</span>
+          </div>
+          <div style="font-size:0.8rem;color:#6B7280;margin-bottom:12px">📍 Full Remote</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #F3F4F6">
+            <span style="font-size:0.9rem;font-weight:800;color:#D4A800">55–72k€ / an</span>
+            <span style="font-size:0.76rem;color:#9CA3AF">Il y a 3j</span>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="card" style="padding:22px">
+          <div class="card-logo" style="margin-bottom:14px">MK</div>
+          <h3 style="font-size:0.96rem;font-weight:700;color:#1E1E1E;margin-bottom:3px;line-height:1.3">Responsable Marketing Digital & SEO</h3>
+          <div style="font-size:0.83rem;color:#9CA3AF;font-weight:500;margin-bottom:10px">MediKare · Marseille</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+            <span class="tag tag-cdi">CDI</span><span class="tag">Présentiel</span><span class="tag">4–7 ans exp.</span>
+          </div>
+          <div style="font-size:0.8rem;color:#6B7280;margin-bottom:12px">📍 Marseille, PACA</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #F3F4F6">
+            <span style="font-size:0.9rem;font-weight:800;color:#D4A800">48–60k€ / an</span>
+            <span style="font-size:0.76rem;color:#9CA3AF">Il y a 4j</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pagination -->
+      <div style="display:flex;justify-content:center;gap:6px;margin-top:32px">
+        <button class="pag-btn">‹</button>
+        <button class="pag-btn active">1</button>
+        <button class="pag-btn">2</button>
+        <button class="pag-btn">3</button>
+        <button class="pag-btn">…</button>
+        <button class="pag-btn">14</button>
+        <button class="pag-btn">›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<!-- VIEW : LOGIN / INSCRIPTION -->
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<div id="view-auth" class="view">
+  <div class="auth-container">
+    <!-- Left panel -->
+    <div class="auth-panel-left">
+      <div style="font-size:0.75rem;color:rgba(255,205,0,0.8);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:20px">U-Recrut — Votre espace personnel</div>
+      <h2 style="font-size:2rem;font-weight:900;color:#fff;line-height:1.2;margin-bottom:14px">Démarrez votre<br>parcours professionnel</h2>
+      <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;line-height:1.65;margin-bottom:36px">Rejoignez des milliers de candidats et recruteurs qui font confiance à U-Recrut chaque jour.</p>
+      <div>
+        <div class="auth-feature"><div class="auth-feature-icon">🎯</div><span>Offres personnalisées selon votre profil et compétences</span></div>
+        <div class="auth-feature"><div class="auth-feature-icon">⚡</div><span>Postulez en un clic avec votre CV sauvegardé</span></div>
+        <div class="auth-feature"><div class="auth-feature-icon">📊</div><span>Suivez vos candidatures et statuts en temps réel</span></div>
+        <div class="auth-feature"><div class="auth-feature-icon">🔔</div><span>Alertes email pour les nouvelles offres qui vous matchent</span></div>
+      </div>
+    </div>
+
+    <!-- Right form panel -->
+    <div class="auth-panel-right">
+      <div class="auth-box">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <div class="logo-mark" style="width:30px;height:30px"></div>
+          <span style="font-weight:900;font-size:1.1rem;color:#2C2C2C;font-family:'Outfit'"><span style="color:#FFCD00">U-</span>Recrut</span>
+        </div>
+        <p style="font-size:0.83rem;color:#9CA3AF;margin-bottom:22px">Accédez à votre espace sécurisé</p>
+
+        <div class="tab-switch">
+          <button class="tab-sw-btn active" id="tab-login-btn" onclick="switchAuthTab('login')">Se connecter</button>
+          <button class="tab-sw-btn" id="tab-register-btn" onclick="switchAuthTab('register')">S'inscrire</button>
+        </div>
+
+        <!-- LOGIN -->
+        <div id="auth-login-form">
+          <button style="width:100%;padding:10px;border:1.5px solid #D1D5DB;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:0.87rem;color:#4D4D4D;cursor:pointer;font-family:'Outfit';font-weight:600;margin-bottom:10px;transition:all 0.18s" onmouseover="this.style.borderColor='#FFCD00'" onmouseout="this.style.borderColor='#D1D5DB'">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Continuer avec Google
+          </button>
+          <button style="width:100%;padding:10px;border:1.5px solid #D1D5DB;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:0.87rem;color:#4D4D4D;cursor:pointer;font-family:'Outfit';font-weight:600;margin-bottom:16px;transition:all 0.18s" onmouseover="this.style.borderColor='#FFCD00'" onmouseout="this.style.borderColor='#D1D5DB'">
+            <svg width="18" height="18" fill="#0A66C2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            Continuer avec LinkedIn
+          </button>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><div style="flex:1;height:1px;background:#EAECEF"></div><span style="font-size:0.78rem;color:#9CA3AF;font-weight:600">ou par email</span><div style="flex:1;height:1px;background:#EAECEF"></div></div>
+          <div style="margin-bottom:14px"><label class="form-label">Email professionnel</label><input type="email" class="form-input" placeholder="prenom.nom@email.com"/></div>
+          <div style="margin-bottom:8px"><label class="form-label">Mot de passe</label><input type="password" class="form-input" placeholder="••••••••"/></div>
+          <div style="text-align:right;margin-bottom:18px"><a href="#" style="font-size:0.8rem;color:#D4A800;font-weight:600;text-decoration:none">Mot de passe oublié ?</a></div>
+          <button class="btn-gold-full" onclick="loginAs('candidate')">Se connecter →</button>
+          <p style="text-align:center;margin-top:16px;font-size:0.81rem;color:#9CA3AF">Pas de compte ? <a href="#" onclick="switchAuthTab('register')" style="color:#D4A800;font-weight:700;text-decoration:none">S'inscrire gratuitement</a></p>
+        </div>
+
+        <!-- REGISTER -->
+        <div id="auth-register-form" style="display:none">
+          <div style="margin-bottom:14px">
+            <label class="form-label">Je suis un(e)</label>
+            <select class="form-select"><option>Candidat — Je recherche un emploi</option><option>Recruteur — Je publie des offres</option></select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+            <div><label class="form-label">Prénom</label><input type="text" class="form-input" placeholder="Marie"/></div>
+            <div><label class="form-label">Nom</label><input type="text" class="form-input" placeholder="Dupont"/></div>
+          </div>
+          <div style="margin-bottom:14px"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="marie.dupont@email.com"/></div>
+          <div style="margin-bottom:18px"><label class="form-label">Mot de passe</label><input type="password" class="form-input" placeholder="8 caractères minimum"/></div>
+          <button class="btn-gold-full">Créer mon compte →</button>
+          <p style="text-align:center;margin-top:14px;font-size:0.78rem;color:#9CA3AF">En vous inscrivant, vous acceptez nos <a href="#" style="color:#D4A800;font-weight:600;text-decoration:none">CGU</a> et <a href="#" style="color:#D4A800;font-weight:600;text-decoration:none">Politique de confidentialité</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<!-- VIEW : DASHBOARD CANDIDAT -->
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<div id="view-candidate" class="view">
+  <div style="display:flex;min-height:calc(100vh - 60px)">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div style="padding:0 16px 20px;border-bottom:1px solid #EAECEF;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="user-avatar">ML</div>
+          <div><div style="font-size:0.88rem;font-weight:800;color:#2C2C2C">Marie Lambert</div><div style="font-size:0.72rem;color:#9CA3AF">Développeuse · Junior</div></div>
+        </div>
+        <div style="margin-top:12px">
+          <div style="font-size:0.72rem;color:#9CA3AF;font-weight:600;margin-bottom:5px">Complétion profil</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
+          <div style="font-size:0.7rem;color:#D4A800;font-weight:700;margin-top:3px;text-align:right">72%</div>
+        </div>
+      </div>
+      <div class="side-section">Navigation</div>
+      <div class="side-item active" onclick="candidateSide(this,'cand-dashboard')"><span class="ico">📊</span>Tableau de bord</div>
+      <div class="side-item" onclick="candidateSide(this,'cand-candidatures')"><span class="ico">📋</span>Mes candidatures<span class="notif-dot"></span></div>
+      <div class="side-item" onclick="gotoView('home',document.querySelectorAll('.nav-pill')[0])"><span class="ico">🔍</span>Chercher des offres</div>
+      <div class="side-item"><span class="ico">❤️</span>Offres sauvegardées</div>
+      <div class="side-section">Mon profil</div>
+      <div class="side-item"><span class="ico">👤</span>Mon profil</div>
+      <div class="side-item"><span class="ico">📄</span>Mon CV</div>
+      <div class="side-item"><span class="ico">🔔</span>Alertes emploi</div>
+      <div class="side-item"><span class="ico">⚙️</span>Paramètres</div>
+      <div style="margin-top:auto;padding:0 0 8px">
+        <div class="side-item" style="color:#F87171" onclick="logoutAction()"><span class="ico">🚪</span>Déconnexion</div>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <main style="flex:1;padding:30px;overflow-y:auto;background:#F8F9FA">
+
+      <!-- SUB-VIEW: Dashboard -->
+      <div id="cand-dashboard">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px">
+          <div>
+            <h2 style="font-size:1.5rem;font-weight:900;color:#1E1E1E">Bonjour, Marie 👋</h2>
+            <p style="font-size:0.85rem;color:#9CA3AF;margin-top:3px">Tableau de bord — lundi 16 mars 2026</p>
+          </div>
+          <button class="btn-gold" onclick="candidateSide(document.querySelector('.side-item:nth-child(5)'), 'cand-candidatures')">+ Soumettre une Organisation</button>
+        </div>
+
+        <!-- STATS -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px">
+          <div class="stat-card gold-accent"><div class="stat-val">12</div><div class="stat-lbl">Candidatures envoyées</div></div>
+          <div class="stat-card" style="border-left:4px solid #FBBF24"><div class="stat-val">4</div><div class="stat-lbl">En attente</div></div>
+          <div class="stat-card green-accent"><div class="stat-val">3</div><div class="stat-lbl">Entretiens planifiés</div></div>
+          <div class="stat-card red-accent"><div class="stat-val">5</div><div class="stat-lbl">Refus reçus</div></div>
+        </div>
+
+        <!-- Table candidatures résumée -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3>Candidatures récentes</h3>
+            <button class="btn-xs btn-xs-gold" onclick="candidateSide(null,'cand-candidatures')">Voir tout →</button>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Poste</th><th>Entreprise</th><th>Lieu</th><th>Date</th><th>Statut</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Développeur Full-Stack</strong></td><td>Société Générale</td><td>Paris</td><td>10 mars</td>
+                <td><span class="badge badge-interview"><span class="badge-dot"></span>Entretien</span></td>
+                <td><button class="btn-xs btn-xs-gold">Voir</button></td>
+              </tr>
+              <tr>
+                <td><strong>Lead Developer React</strong></td><td>OgmaTech</td><td>Remote</td><td>8 mars</td>
+                <td><span class="badge badge-wait"><span class="badge-dot"></span>En attente</span></td>
+                <td><button class="btn-xs btn-xs-gold">Voir</button></td>
+              </tr>
+              <tr>
+                <td><strong>Ingénieur DevOps AWS</strong></td><td>DataSpark</td><td>Lyon</td><td>5 mars</td>
+                <td><span class="badge badge-interview"><span class="badge-dot"></span>Entretien</span></td>
+                <td><button class="btn-xs btn-xs-gold">Voir</button></td>
+              </tr>
+              <tr>
+                <td><strong>Product Manager</strong></td><td>Accenture</td><td>Paris</td><td>28 fév.</td>
+                <td><span class="badge badge-rejected"><span class="badge-dot"></span>Refusé</span></td>
+                <td><button class="btn-xs btn-xs-outline">Archiver</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="section-card">
+          <div class="section-card-header"><h3>💡 Offres recommandées pour vous</h3><button class="btn-xs btn-xs-gold" onclick="gotoView('home',document.querySelectorAll('.nav-pill')[0])">Explorer →</button></div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:16px">
+            <div style="border:1.5px solid #EAECEF;border-radius:10px;padding:16px;transition:border-color 0.18s;cursor:pointer" onmouseover="this.style.borderColor='#FFCD00'" onmouseout="this.style.borderColor='#EAECEF'">
+              <div style="font-weight:800;font-size:0.9rem;color:#1E1E1E;margin-bottom:4px">Senior React Dev</div>
+              <div style="font-size:0.8rem;color:#D4A800;font-weight:600;margin-bottom:8px">BNP Paribas · Paris</div>
+              <div style="font-size:0.8rem;color:#6B7280">60–78k€ · CDI · Hybride</div>
+              <button class="btn-gold" style="margin-top:10px;width:100%;padding:8px;font-size:0.8rem">Postuler</button>
+            </div>
+            <div style="border:1.5px solid #EAECEF;border-radius:10px;padding:16px;transition:border-color 0.18s;cursor:pointer" onmouseover="this.style.borderColor='#FFCD00'" onmouseout="this.style.borderColor='#EAECEF'">
+              <div style="font-weight:800;font-size:0.9rem;color:#1E1E1E;margin-bottom:4px">Architecte Cloud</div>
+              <div style="font-size:0.8rem;color:#D4A800;font-weight:600;margin-bottom:8px">TechVision · Remote</div>
+              <div style="font-size:0.8rem;color:#6B7280">75–95k€ · CDI · Remote</div>
+              <button class="btn-gold" style="margin-top:10px;width:100%;padding:8px;font-size:0.8rem">Postuler</button>
+            </div>
+            <div style="border:1.5px solid #EAECEF;border-radius:10px;padding:16px;transition:border-color 0.18s;cursor:pointer" onmouseover="this.style.borderColor='#FFCD00'" onmouseout="this.style.borderColor='#EAECEF'">
+              <div style="font-weight:800;font-size:0.9rem;color:#1E1E1E;margin-bottom:4px">CTO Startup EdTech</div>
+              <div style="font-size:0.8rem;color:#D4A800;font-weight:600;margin-bottom:8px">GrowthLab · Nantes</div>
+              <div style="font-size:0.8rem;color:#6B7280">80–100k€ · CDI + BSPCE</div>
+              <button class="btn-gold" style="margin-top:10px;width:100%;padding:8px;font-size:0.8rem">Postuler</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW: Candidatures full list (hidden initially) -->
+      <div id="cand-candidatures" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:26px">
+          <div><h2 style="font-size:1.5rem;font-weight:900;color:#1E1E1E">Mes candidatures</h2><p style="font-size:0.85rem;color:#9CA3AF;margin-top:3px">12 candidatures envoyées au total</p></div>
+          <button class="btn-gold" onclick="gotoView('home',document.querySelectorAll('.nav-pill')[0])">+ Postuler à de nouvelles offres</button>
+        </div>
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3>Toutes mes candidatures</h3>
+            <div style="display:flex;gap:8px">
+              <input type="text" style="border:1.5px solid #D1D5DB;border-radius:8px;padding:7px 12px;font-size:0.83rem;font-family:'Outfit';outline:none;width:180px" placeholder="🔍 Filtrer…" onfocus="this.style.borderColor='#FFCD00'" onblur="this.style.borderColor='#D1D5DB'"/>
+              <select style="border:1.5px solid #D1D5DB;border-radius:8px;padding:7px 12px;font-size:0.83rem;font-family:'Outfit';background:#fff;outline:none"><option>Tous les statuts</option><option>En attente</option><option>Entretien</option><option>Refusé</option></select>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Poste</th><th>Entreprise</th><th>Lieu</th><th>Contrat</th><th>Soumis le</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Développeur Full-Stack</strong></td><td>Société Générale</td><td>Paris</td><td>CDI</td><td>10 mars 2026</td><td><span class="badge badge-interview"><span class="badge-dot"></span>Entretien RH</span></td><td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Détails</button><button class="btn-xs btn-xs-outline">Lettre</button></div></td></tr>
+              <tr><td><strong>Lead Developer React</strong></td><td>OgmaTech</td><td>Remote</td><td>CDI</td><td>8 mars 2026</td><td><span class="badge badge-wait"><span class="badge-dot"></span>En attente</span></td><td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Détails</button><button class="btn-xs btn-xs-outline">Lettre</button></div></td></tr>
+              <tr><td><strong>Ingénieur DevOps AWS</strong></td><td>DataSpark</td><td>Lyon</td><td>CDI</td><td>5 mars 2026</td><td><span class="badge badge-interview"><span class="badge-dot"></span>Entretien Technique</span></td><td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Détails</button><button class="btn-xs btn-xs-outline">Lettre</button></div></td></tr>
+              <tr><td><strong>Product Manager</strong></td><td>Accenture</td><td>Paris</td><td>CDI</td><td>28 fév. 2026</td><td><span class="badge badge-rejected"><span class="badge-dot"></span>Refusé</span></td><td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-outline">Archiver</button></div></td></tr>
+              <tr><td><strong>Tech Lead Node.js</strong></td><td>Craft Studio</td><td>Bordeaux</td><td>CDI</td><td>22 fév. 2026</td><td><span class="badge badge-wait"><span class="badge-dot"></span>En attente</span></td><td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Détails</button><button class="btn-xs btn-xs-outline">Lettre</button></div></td></tr>
+              <tr><td><strong>Software Engineer</strong></td><td>MediKare</td><td>Marseille</td><td>CDI</td><td>18 fév. 2026</td><td><span class="badge badge-rejected"><span class="badge-dot"></span>Refusé</span></td><td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-outline">Archiver</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<!-- VIEW : DASHBOARD RECRUTEUR -->
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<div id="view-recruiter" class="view">
+  <div style="display:flex;min-height:calc(100vh - 60px)">
+    <nav class="sidebar">
+      <div style="padding:0 16px 20px;border-bottom:1px solid #EAECEF;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="user-avatar recruiter">TR</div>
+          <div><div style="font-size:0.88rem;font-weight:800;color:#2C2C2C">Thomas Renard</div><div style="font-size:0.72rem;color:#9CA3AF">Recruteur · DataSpark</div></div>
+        </div>
+      </div>
+      <div class="side-section">Gestion</div>
+      <div class="side-item active" onclick="recruiterSide(this,'rec-dashboard')"><span class="ico">📊</span>Tableau de bord</div>
+      <div class="side-item" onclick="recruiterSide(this,'rec-offres')"><span class="ico">📋</span>Mes offres publiées</div>
+      <div class="side-item" onclick="recruiterSide(this,'rec-candidats')"><span class="ico">👥</span>Candidatures reçues<span class="notif-dot"></span></div>
+      <div class="side-item"><span class="ico">📅</span>Entretiens planifiés</div>
+      <div class="side-section">Publication</div>
+      <div class="side-item"><span class="ico">➕</span>Publier une offre</div>
+      <div class="side-item"><span class="ico">🏢</span>Ma page entreprise</div>
+      <div class="side-item"><span class="ico">📈</span>Statistiques</div>
+      <div class="side-item"><span class="ico">⚙️</span>Paramètres</div>
+      <div style="margin-top:auto;padding:0 0 8px">
+        <div class="side-item" style="color:#F87171" onclick="logoutAction()"><span class="ico">🚪</span>Déconnexion</div>
+      </div>
+    </nav>
+
+    <main style="flex:1;padding:30px;overflow-y:auto;background:#F8F9FA">
+
+      <!-- Dashboard overview -->
+      <div id="rec-dashboard">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px">
+          <div><h2 style="font-size:1.5rem;font-weight:900;color:#1E1E1E">Espace Recruteur</h2><p style="font-size:0.85rem;color:#9CA3AF;margin-top:3px">DataSpark — lundi 16 mars 2026</p></div>
+          <button class="btn-gold">+ Publier une offre</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px">
+          <div class="stat-card gold-accent"><div class="stat-val">8</div><div class="stat-lbl">Offres actives</div></div>
+          <div class="stat-card blue-accent"><div class="stat-val">142</div><div class="stat-lbl">Candidatures reçues</div></div>
+          <div class="stat-card green-accent"><div class="stat-val">12</div><div class="stat-lbl">Entretiens à venir</div></div>
+          <div class="stat-card" style="border-left:4px solid #FBBF24"><div class="stat-val">2 840</div><div class="stat-lbl">Vues sur les offres</div></div>
+        </div>
+
+        <!-- Mini chart placeholder -->
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px">
+          <div class="section-card">
+            <div class="section-card-header"><h3>📈 Vues des offres (7 derniers jours)</h3></div>
+            <div style="padding:20px;display:flex;align-items:flex-end;gap:12px;height:120px">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+                <div style="background:#FFCD00;border-radius:4px 4px 0 0;width:100%;height:40%"></div>
+                <div style="font-size:0.68rem;color:#9CA3AF;font-weight:600">Lun</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+                <div style="background:#FFCD00;border-radius:4px 4px 0 0;width:100%;height:60%"></div>
+                <div style="font-size:0.68rem;color:#9CA3AF;font-weight:600">Mar</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+                <div style="background:#FFCD00;border-radius:4px 4px 0 0;width:100%;height:45%"></div>
+                <div style="font-size:0.68rem;color:#9CA3AF;font-weight:600">Mer</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+                <div style="background:#FFCD00;border-radius:4px 4px 0 0;width:100%;height:80%"></div>
+                <div style="font-size:0.68rem;color:#9CA3AF;font-weight:600">Jeu</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+                <div style="background:#FFE57A;border-radius:4px 4px 0 0;width:100%;height:70%"></div>
+                <div style="font-size:0.68rem;color:#9CA3AF;font-weight:600">Ven</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+                <div style="background:#FFE57A;border-radius:4px 4px 0 0;width:100%;height:55%"></div>
+                <div style="font-size:0.68rem;color:#9CA3AF;font-weight:600">Sam</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+                <div style="background:#D4A800;border-radius:4px 4px 0 0;width:100%;height:95%"></div>
+                <div style="font-size:0.68rem;color:#9CA3AF;font-weight:600">Dim</div>
+              </div>
+            </div>
+          </div>
+          <div class="section-card">
+            <div class="section-card-header"><h3>🎯 Taux de conversion</h3></div>
+            <div style="padding:20px">
+              <div style="margin-bottom:14px">
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:600;color:#4D4D4D;margin-bottom:5px"><span>Vue → Candidature</span><span style="color:#D4A800">8.4%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:8.4%"></div></div>
+              </div>
+              <div style="margin-bottom:14px">
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:600;color:#4D4D4D;margin-bottom:5px"><span>Candidature → Entretien</span><span style="color:#D4A800">22%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:22%"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:600;color:#4D4D4D;margin-bottom:5px"><span>Entretien → Embauche</span><span style="color:#34D399">18%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:18%;background:#34D399"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top offres -->
+        <div class="section-card">
+          <div class="section-card-header"><h3>Meilleures offres par vues</h3><button class="btn-xs btn-xs-gold" onclick="recruiterSide(null,'rec-offres')">Gérer toutes les offres →</button></div>
+          <table class="data-table">
+            <thead><tr><th>Offre</th><th>Vues</th><th>Postulants</th><th>Taux</th><th>Expire</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Data Scientist NLP</strong></td><td>840</td><td>48</td><td><span style="font-size:0.82rem;font-weight:700;color:#D4A800">5.7%</span></td><td>01 avr.</td><td><button class="btn-xs btn-xs-gold">Gérer</button></td></tr>
+              <tr><td><strong>ML Engineer Senior</strong></td><td>620</td><td>32</td><td><span style="font-size:0.82rem;font-weight:700;color:#D4A800">5.2%</span></td><td>15 mars</td><td><button class="btn-xs btn-xs-gold">Gérer</button></td></tr>
+              <tr><td><strong>Data Analyst Junior</strong></td><td>1 200</td><td>62</td><td><span style="font-size:0.82rem;font-weight:700;color:#34D399">5.2%</span></td><td>Expirée</td><td><button class="btn-xs btn-xs-outline">Republier</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Gestion des offres -->
+      <div id="rec-offres" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px">
+          <div><h2 style="font-size:1.5rem;font-weight:900;color:#1E1E1E">Mes offres publiées</h2><p style="font-size:0.85rem;color:#9CA3AF;margin-top:3px">8 offres actives · 3 expirées</p></div>
+          <button class="btn-gold">+ Publier une offre</button>
+        </div>
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3>Toutes mes offres</h3>
+            <div style="display:flex;gap:8px">
+              <input type="text" style="border:1.5px solid #D1D5DB;border-radius:8px;padding:7px 12px;font-size:0.83rem;font-family:'Outfit';outline:none;width:180px" placeholder="🔍 Filtrer…" onfocus="this.style.borderColor='#FFCD00'" onblur="this.style.borderColor='#D1D5DB'"/>
+              <select style="border:1.5px solid #D1D5DB;border-radius:8px;padding:7px 12px;font-size:0.83rem;font-family:'Outfit';background:#fff;outline:none"><option>Toutes</option><option>Actives</option><option>Expirées</option></select>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Offre</th><th>Contrat</th><th>Publiée</th><th>Expire</th><th>Postulants</th><th>Vues</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:8px;background:#FFFBEB;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;color:#D4A800;border:1px solid #FFE57A;flex-shrink:0">DS</div><div><div style="font-weight:700;font-size:0.86rem">Data Scientist NLP</div><div style="font-size:0.74rem;color:#9CA3AF">Lyon / Remote</div></div></div></td>
+                <td>CDI</td><td>01 mars</td><td>01 avr.</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><strong>48</strong><div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:60%"></div></div></div></td>
+                <td><strong>840</strong></td>
+                <td><span class="badge badge-active"><span class="badge-dot"></span>Active</span></td>
+                <td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Modifier</button><button class="btn-xs btn-xs-outline">Prolonger</button><button class="btn-xs btn-xs-gold">Candidats</button><button class="btn-xs btn-xs-danger">Suppr.</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:8px;background:#FFFBEB;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;color:#D4A800;border:1px solid #FFE57A;flex-shrink:0">DS</div><div><div style="font-weight:700;font-size:0.86rem">ML Engineer Senior</div><div style="font-size:0.74rem;color:#9CA3AF">Paris</div></div></div></td>
+                <td>CDI</td><td>15 fév.</td><td style="color:#F87171;font-weight:600">15 mars ⚠️</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><strong>32</strong><div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:40%"></div></div></div></td>
+                <td><strong>620</strong></td>
+                <td><span class="badge badge-wait"><span class="badge-dot"></span>Expire bientôt</span></td>
+                <td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Modifier</button><button class="btn-xs btn-xs-success">Prolonger</button><button class="btn-xs btn-xs-gold">Candidats</button><button class="btn-xs btn-xs-danger">Suppr.</button></div></td>
+              </tr>
+              <tr style="opacity:0.65">
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:8px;background:#F3F4F6;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;color:#9CA3AF;flex-shrink:0">DS</div><div><div style="font-weight:700;font-size:0.86rem">Data Analyst Junior</div><div style="font-size:0.74rem;color:#9CA3AF">Lyon · Alternance</div></div></div></td>
+                <td>Alternance</td><td>20 jan.</td><td>20 fév.</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><strong>62</strong><div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:80%;background:#9CA3AF"></div></div></div></td>
+                <td><strong>1 200</strong></td>
+                <td><span class="badge" style="background:#F3F4F6;color:#6B7280"><span class="badge-dot" style="background:#9CA3AF"></span>Expirée</span></td>
+                <td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-outline">Republier</button><button class="btn-xs btn-xs-gold">Candidats</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Candidats reçus -->
+      <div id="rec-candidats" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px">
+          <div><h2 style="font-size:1.5rem;font-weight:900;color:#1E1E1E">Candidatures reçues</h2><p style="font-size:0.85rem;color:#9CA3AF;margin-top:3px">142 candidatures sur vos offres actives</p></div>
+          <select style="border:1.5px solid #D1D5DB;border-radius:8px;padding:9px 14px;font-size:0.85rem;font-family:'Outfit';background:#fff;outline:none"><option>Toutes les offres</option><option>Data Scientist NLP (48)</option><option>ML Engineer Senior (32)</option></select>
+        </div>
+        <div class="section-card">
+          <div class="section-card-header"><h3>Candidats — Data Scientist NLP</h3><span style="font-size:0.8rem;color:#9CA3AF">48 candidatures</span></div>
+          <div style="padding:0 16px">
+            <div class="cand-row">
+              <div class="cand-av">AS</div>
+              <div style="flex:1"><div style="font-size:0.88rem;font-weight:700;color:#1E1E1E">Alice Simon</div><div style="font-size:0.76rem;color:#9CA3AF">MSc Data Science · 4 ans exp. · Paris</div></div>
+              <span class="badge badge-interview"><span class="badge-dot"></span>Entretien RH</span>
+              <div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Profil</button><button class="btn-xs btn-xs-success">✓ Valider</button><button class="btn-xs btn-xs-danger">✗ Refuser</button></div>
+            </div>
+            <div class="cand-row">
+              <div class="cand-av">KM</div>
+              <div style="flex:1"><div style="font-size:0.88rem;font-weight:700;color:#1E1E1E">Kevin Morel</div><div style="font-size:0.76rem;color:#9CA3AF">PhD NLP · 6 ans exp. · Lyon</div></div>
+              <span class="badge badge-wait"><span class="badge-dot"></span>En attente</span>
+              <div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Profil</button><button class="btn-xs btn-xs-success">✓ Valider</button><button class="btn-xs btn-xs-danger">✗ Refuser</button></div>
+            </div>
+            <div class="cand-row">
+              <div class="cand-av">NB</div>
+              <div style="flex:1"><div style="font-size:0.88rem;font-weight:700;color:#1E1E1E">Nina Bernard</div><div style="font-size:0.76rem;color:#9CA3AF">Ingénieure ML · 3 ans exp. · Remote</div></div>
+              <span class="badge badge-wait"><span class="badge-dot"></span>En attente</span>
+              <div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Profil</button><button class="btn-xs btn-xs-success">✓ Valider</button><button class="btn-xs btn-xs-danger">✗ Refuser</button></div>
+            </div>
+            <div class="cand-row">
+              <div class="cand-av">JD</div>
+              <div style="flex:1"><div style="font-size:0.88rem;font-weight:700;color:#1E1E1E">Jules Dufour</div><div style="font-size:0.76rem;color:#9CA3AF">Data Scientist · 2 ans exp. · Bordeaux</div></div>
+              <span class="badge badge-rejected"><span class="badge-dot"></span>Refusé</span>
+              <div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Profil</button><button class="btn-xs btn-xs-outline">Archiver</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<!-- VIEW : DASHBOARD ADMIN -->
+<!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+<div id="view-admin" class="view">
+  <div style="display:flex;min-height:calc(100vh - 60px)">
+    <nav class="sidebar">
+      <div style="padding:0 16px 20px;border-bottom:1px solid #EAECEF;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="user-avatar admin">AD</div>
+          <div><div style="font-size:0.88rem;font-weight:800;color:#2C2C2C">Admin Principal</div><div style="font-size:0.72rem;color:#9CA3AF">Super Administrateur</div></div>
+        </div>
+      </div>
+      <div class="side-section">Modération</div>
+      <div class="side-item active" onclick="adminSide(this,'adm-console')"><span class="ico">⚙️</span>Console principale</div>
+      <div class="side-item" onclick="adminSide(this,'adm-orgs')"><span class="ico">🏢</span>Organisations<span class="notif-dot"></span></div>
+      <div class="side-item" onclick="adminSide(this,'adm-recruiters')"><span class="ico">👥</span>Accès recruteurs<span class="notif-dot"></span></div>
+      <div class="side-item"><span class="ico">📋</span>Toutes les offres</div>
+      <div class="side-section">Plateforme</div>
+      <div class="side-item"><span class="ico">👤</span>Utilisateurs</div>
+      <div class="side-item"><span class="ico">📊</span>Analytics</div>
+      <div class="side-item"><span class="ico">🔧</span>Configuration</div>
+      <div class="side-item"><span class="ico">📜</span>Logs système</div>
+      <div style="margin-top:auto;padding:0 0 8px">
+        <div class="side-item" style="color:#F87171" onclick="logoutAction()"><span class="ico">🚪</span>Déconnexion</div>
+      </div>
+    </nav>
+
+    <main style="flex:1;padding:30px;overflow-y:auto;background:#F8F9FA">
+
+      <!-- Console principale -->
+      <div id="adm-console">
+        <div style="margin-bottom:26px"><h2 style="font-size:1.5rem;font-weight:900;color:#1E1E1E">Console d'administration</h2><p style="font-size:0.85rem;color:#9CA3AF;margin-top:3px">Supervision & modération — U-Recrut Platform</p></div>
+
+        <div class="admin-alert">
+          <span style="font-size:1.3rem">⚠️</span>
+          <p style="font-size:0.87rem;color:#92400E"><strong style="font-weight:800">5 demandes en attente de validation</strong> — 3 nouvelles organisations et 2 accès recruteurs nécessitent votre approbation.</p>
+          <button class="btn-gold" style="margin-left:auto;padding:8px 18px;font-size:0.82rem;white-space:nowrap" onclick="adminSide(null,'adm-orgs')">Traiter maintenant →</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px">
+          <div class="stat-card gold-accent"><div class="stat-val">48 620</div><div class="stat-lbl">Utilisateurs totaux</div></div>
+          <div class="stat-card green-accent"><div class="stat-val">3 210</div><div class="stat-lbl">Organisations actives</div></div>
+          <div class="stat-card" style="border-left:4px solid #FBBF24"><div class="stat-val">5</div><div class="stat-lbl">En attente validation</div></div>
+          <div class="stat-card red-accent"><div class="stat-val">12</div><div class="stat-lbl">Signalements actifs</div></div>
+        </div>
+
+        <!-- Signalements -->
+        <div class="section-card">
+          <div class="section-card-header"><h3>🚩 Signalements récents</h3><button class="btn-xs btn-xs-gold">Voir tout (12)</button></div>
+          <table class="data-table">
+            <thead><tr><th>Contenu</th><th>Type</th><th>Signalé par</th><th>Motif</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Offre #4821 — "Stagiaire multi-tâches"</strong></td><td><span class="badge badge-interview" style="font-size:0.73rem">Offre</span></td><td>3 utilisateurs</td><td>Conditions abusives</td><td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Voir</button><button class="btn-xs btn-xs-danger">Retirer</button><button class="btn-xs btn-xs-outline">Ignorer</button></div></td></tr>
+              <tr><td><strong>Compte #9002 — faux.recruteur@spam.com</strong></td><td><span class="badge badge-rejected" style="font-size:0.73rem">Compte</span></td><td>5 utilisateurs</td><td>Phishing / arnaque</td><td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-gold">Voir</button><button class="btn-xs btn-xs-danger">Bannir</button><button class="btn-xs btn-xs-outline">Ignorer</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Modération organisations -->
+      <div id="adm-orgs" style="display:none">
+        <div style="margin-bottom:26px"><h2 style="font-size:1.5rem;font-weight:900;color:#1E1E1E">Validation des organisations</h2><p style="font-size:0.85rem;color:#9CA3AF;margin-top:3px">3 nouvelles organisations en attente d'approbation</p></div>
+
+        <div class="admin-alert">
+          <span style="font-size:1.2rem">ℹ️</span>
+          <p style="font-size:0.85rem;color:#92400E">Vérifiez les documents fournis avant de valider. Une organisation avec des documents incomplets ne peut pas être approuvée.</p>
+        </div>
+
+        <div class="section-card">
+          <div class="section-card-header"><h3>🏢 Nouvelles organisations à valider</h3><span style="font-size:0.8rem;color:#9CA3AF">3 en attente</span></div>
+          <table class="data-table">
+            <thead><tr><th>Organisation</th><th>Responsable</th><th>Type</th><th>Demandé le</th><th>Documents</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:8px;background:#FFFBEB;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;color:#D4A800;border:1px solid #FFE57A">IN</div><div><div style="font-weight:700;font-size:0.86rem">InnovateTech SAS</div><div style="font-size:0.74rem;color:#9CA3AF">Paris · ESN</div></div></div></td>
+                <td>Jean-Pierre Blanc</td>
+                <td><span class="badge badge-interview" style="font-size:0.73rem">Entreprise</span></td>
+                <td>14 mars 2026</td>
+                <td><button class="btn-xs btn-xs-gold">📎 3 docs</button></td>
+                <td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-success">✓ Valider</button><button class="btn-xs btn-xs-danger">✗ Rejeter</button><button class="btn-xs btn-xs-outline">👁 Voir</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:8px;background:#FFFBEB;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;color:#D4A800;border:1px solid #FFE57A">UL</div><div><div style="font-weight:700;font-size:0.86rem">Université Lyon 3</div><div style="font-size:0.74rem;color:#9CA3AF">Lyon · Académique</div></div></div></td>
+                <td>Prof. Claire Martin</td>
+                <td><span class="badge badge-active" style="font-size:0.73rem">Académique</span></td>
+                <td>13 mars 2026</td>
+                <td><button class="btn-xs btn-xs-gold">📎 2 docs</button></td>
+                <td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-success">✓ Valider</button><button class="btn-xs btn-xs-danger">✗ Rejeter</button><button class="btn-xs btn-xs-outline">👁 Voir</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:8px;background:#FFF1F2;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;color:#9F1239;border:1px solid #FCA5A5">GH</div><div><div style="font-weight:700;font-size:0.86rem">GreenHealth SCOP</div><div style="font-size:0.74rem;color:#9CA3AF">Grenoble · Santé</div></div></div></td>
+                <td>Sophie Leclerc</td>
+                <td><span class="badge badge-wait" style="font-size:0.73rem">Santé</span></td>
+                <td>12 mars 2026</td>
+                <td><button class="btn-xs btn-xs-danger">📎 Incomplet ⚠️</button></td>
+                <td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-outline" style="opacity:0.5;cursor:not-allowed">✓ Valider</button><button class="btn-xs btn-xs-danger">✗ Rejeter</button><button class="btn-xs btn-xs-outline">👁 Voir</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Modération recruteurs -->
+      <div id="adm-recruiters" style="display:none">
+        <div style="margin-bottom:26px"><h2 style="font-size:1.5rem;font-weight:900;color:#1E1E1E">Validation des accès recruteurs</h2><p style="font-size:0.85rem;color:#9CA3AF;margin-top:3px">2 demandes d'accès recruteur en attente</p></div>
+        <div class="section-card">
+          <div class="section-card-header"><h3>👥 Accès recruteurs à valider</h3><span style="font-size:0.8rem;color:#9CA3AF">2 en attente</span></div>
+          <table class="data-table">
+            <thead><tr><th>Recruteur</th><th>Organisation</th><th>Email pro.</th><th>Demandé le</th><th>Statut org.</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px"><div class="cand-av" style="border-radius:8px">LV</div><div><div style="font-size:0.86rem;font-weight:700">Lucas Verdier</div><div style="font-size:0.74rem;color:#9CA3AF">DRH</div></div></div></td>
+                <td>InnovateTech SAS</td><td>l.verdier@innovatetech.fr</td><td>14 mars 2026</td>
+                <td><span class="badge badge-wait"><span class="badge-dot"></span>Org. en attente</span></td>
+                <td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-success">✓ Approuver</button><button class="btn-xs btn-xs-danger">✗ Refuser</button></div></td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:10px"><div class="cand-av" style="border-radius:8px">EP</div><div><div style="font-size:0.86rem;font-weight:700">Emma Parra</div><div style="font-size:0.74rem;color:#9CA3AF">Talent Acquisition</div></div></div></td>
+                <td>DataSpark</td><td>e.parra@dataspark.io</td><td>15 mars 2026</td>
+                <td><span class="badge badge-active"><span class="badge-dot"></span>Org. validée</span></td>
+                <td><div style="display:flex;gap:5px"><button class="btn-xs btn-xs-success">✓ Approuver</button><button class="btn-xs btn-xs-danger">✗ Refuser</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Demo tooltip -->
+<div class="demo-hint">🖱 Naviguez entre les vues via la barre du haut</div>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+// ── Main view switcher ──────────────────────────────────────
+function gotoView(id, tabEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  document.querySelectorAll('.nav-pill').forEach(t => t.classList.remove('active'));
+  if (tabEl) tabEl.classList.add('active');
+  window.scrollTo(0,0);
+  // Update nav user zone
+  const userZone = document.getElementById('user-info-zone');
+  const avatar = document.getElementById('nav-avatar');
+  if (id === 'candidate') { setNavUser('Marie Lambert','Candidat','ML'); }
+  else if (id === 'recruiter') { setNavUser('Thomas Renard','Recruteur','TR'); }
+  else if (id === 'admin') { setNavUser('Admin Principal','Super Admin','AD'); }
+  else { userZone.style.display='none'; avatar.style.display='none'; }
+}
+
+function setNavUser(name, role, initials) {
+  const userZone = document.getElementById('user-info-zone');
+  const avatar = document.getElementById('nav-avatar');
+  document.getElementById('nav-username').textContent = name;
+  document.getElementById('nav-userrole').textContent = role;
+  avatar.textContent = initials;
+  userZone.style.display = 'block';
+  avatar.style.display = 'flex';
+}
+
+// ── Auth tab switch ─────────────────────────────────────────
+function switchAuthTab(mode) {
+  document.getElementById('auth-login-form').style.display = mode === 'login' ? '' : 'none';
+  document.getElementById('auth-register-form').style.display = mode === 'register' ? '' : 'none';
+  document.getElementById('tab-login-btn').classList.toggle('active', mode === 'login');
+  document.getElementById('tab-register-btn').classList.toggle('active', mode === 'register');
+}
+
+function loginAs(role) {
+  const views = { candidate: 2, recruiter: 3, admin: 4 };
+  const pills = document.querySelectorAll('.nav-pill');
+  gotoView(role, pills[views[role]]);
+}
+
+// ── Candidate sidebar sub-views ─────────────────────────────
+function candidateSide(el, targetId) {
+  ['cand-dashboard','cand-candidatures'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+  const target = document.getElementById(targetId);
+  if(target) target.style.display = '';
+  document.querySelectorAll('#view-candidate .side-item').forEach(i => i.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+// ── Recruiter sidebar sub-views ─────────────────────────────
+function recruiterSide(el, targetId) {
+  ['rec-dashboard','rec-offres','rec-candidats'].forEach(id => {
+    const e = document.getElementById(id);
+    if(e) e.style.display = 'none';
+  });
+  const target = document.getElementById(targetId);
+  if(target) target.style.display = '';
+  document.querySelectorAll('#view-recruiter .side-item').forEach(i => i.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+// ── Admin sidebar sub-views ─────────────────────────────────
+function adminSide(el, targetId) {
+  ['adm-console','adm-orgs','adm-recruiters'].forEach(id => {
+    const e = document.getElementById(id);
+    if(e) e.style.display = 'none';
+  });
+  const target = document.getElementById(targetId);
+  if(target) target.style.display = '';
+  document.querySelectorAll('#view-admin .side-item').forEach(i => i.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+// ── Logout ──────────────────────────────────────────────────
+function logoutAction() {
+  const pills = document.querySelectorAll('.nav-pill');
+  gotoView('auth', pills[1]);
+}
+</script>
+</body>
+</html>
