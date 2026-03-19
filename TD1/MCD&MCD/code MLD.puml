@@ -81,7 +81,6 @@ entity "OffreEmploi" as offre_emploi {
   statutOffre : varchar
   piecesDemandees : text
   nbPiecesDemandees : int
-  sirenOrganisation : varchar [FK]
   idRecruteur : int [FK]
   idFichePoste : int [FK]
 }
