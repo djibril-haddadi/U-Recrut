@@ -1,0 +1,40 @@
+# --- DÉPENDANCES ---
+# On ne versionne jamais les modules installés (trop lourd)
+node_modules/
+jspm_packages/
+
+# --- CONFIGURATION & SÉCURITÉ ---
+# Très important : contient tes identifiants DB (PostgreSQL)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# --- LOGS ---
+# Fichiers de suivi d'erreurs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# --- OS / ÉDITEURS ---
+# Fichiers spécifiques à ton système ou ton codeur (VS Code, Mac)
+.DS_Store
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# --- BASE DE DONNÉES ---
+# Si tu utilises SQLite pour des tests rapides (optionnel)
+*.sqlite
+
+# --- DOSSIER DE BUILD (si présent) ---
+dist/
+build/
+
