@@ -161,6 +161,12 @@ cd Maquette && python3 -m http.server 8080
 > Le logo est disponible en version claire et sombre dans `Maquette/asset/image.png`
 
 ---
+## Base de donner 
+
+https://tuxa.sme.utc.fr/phpmyadmin/ 
+
+login dans le .env donner par mail par le prof
+---
 
 ## Équipe
 
