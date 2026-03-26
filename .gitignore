@@ -45,3 +45,4 @@ build/
 .yarn/
 # Fichiers de cache de pnpm
 .pnpm-store/
+myapp/model/ai16p032.sql
