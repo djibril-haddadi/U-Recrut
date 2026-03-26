@@ -1,34 +1,34 @@
 var db = require('./db.js');
 
+const query = (sql, params) => new Promise((resolve, reject) => {
+  db.query(sql, params, (err, results) => {
+    if (err) return reject(err);
+    resolve(results);
+  });
+});
+
 module.exports = {
-  read: function(id, callback) {
-    db.query('SELECT * FROM offre_emploi WHERE idOffre = ?', id, function(err, results) {
-      if (err) throw err;
-      callback(results.length > 0 ? results[0] : null);
-    });
+  read: async (id) => {
+    const results = await query('SELECT * FROM offre_emploi WHERE idOffre = ?', [id]);
+    return results.length > 0 ? results[0] : null;
   },
-  readAll: function(callback) {
-    db.query('SELECT * FROM offre_emploi', function(err, results) {
-      if (err) throw err;
-      callback(results);
-    });
+
+  readAll: async () => {
+    return query('SELECT * FROM offre_emploi', []);
   },
-  create: function(data, callback) {
-    db.query('INSERT INTO offre_emploi SET ?', data, function(err, result) {
-      if (err) throw err;
-      callback(Object.assign({insertId: result.insertId}, data));
-    });
+
+  create: async (data) => {
+    const result = await query('INSERT INTO offre_emploi SET ?', data);
+    return Object.assign({ insertId: result.insertId }, data);
   },
-  update: function(id, data, callback) {
-    db.query('UPDATE offre_emploi SET ? WHERE idOffre = ?', [data, id], function(err, result) {
-      if (err) throw err;
-      callback(result.affectedRows);
-    });
+
+  update: async (id, data) => {
+    const result = await query('UPDATE offre_emploi SET ? WHERE idOffre = ?', [data, id]);
+    return result.affectedRows;
   },
-  delete: function(id, callback) {
-    db.query('DELETE FROM offre_emploi WHERE idOffre = ?', id, function(err, result) {
-      if (err) throw err;
-      callback(result.affectedRows);
-    });
+
+  delete: async (id) => {
+    const result = await query('DELETE FROM offre_emploi WHERE idOffre = ?', [id]);
+    return result.affectedRows;
   }
 };
