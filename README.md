@@ -167,6 +167,10 @@ https://tuxa.sme.utc.fr/phpmyadmin/
 
 login dans le .env donner par mail par le prof
 ---
+## Node js
+
+on install express avec : npm install -g express-generator
+on crée myapp 
 
 ## Équipe
 

@@ -38,3 +38,10 @@ logs/
 dist/
 build/
 
+# --- node js ----
+# Fichiers de cache de npm
+.npm/
+# Fichiers de cache de yarn
+.yarn/
+# Fichiers de cache de pnpm
+.pnpm-store/
