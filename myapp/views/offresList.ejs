@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.1/css/bootstrap.min.css" crossorigin="anonymous">
+  </head>
+  <body class="p-4">
+    <div class="container">
+      <h1 class="mb-4"><%= title %></h1>
+      <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>ID</th>
+            <th>Intitulé</th>
+            <th>Description</th>
+            <th>Date publication</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% offres.forEach((offre) => { %>
+            <tr>
+              <td><%= offre.idOffre %></td>
+              <td><%= offre.intitule || offre.titre || '-' %></td>
+              <td><%= offre.description || '-' %></td>
+              <td><%= offre.date_publication || '-' %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
