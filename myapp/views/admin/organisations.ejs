@@ -1,0 +1,39 @@
+<%- include('../layout') %>
+
+<div style="max-width:1400px;margin:0 auto;padding:32px 24px;">
+  <a href="/dashboard/admin" style="color:#FFCD00; text-decoration:none; font-weight:700; margin-bottom:20px; display:inline-block;">
+    ← Retour à la console
+  </a>
+
+  <h1 style="font-size:2rem; font-weight:900; color:#2C2C2C; margin-bottom:24px;">
+    🏢 Organisations
+  </h1>
+
+  <% if (organisations.length === 0) { %>
+    <div style="background:#fff; border-radius:12px; border:1px dashed #EAECEF; padding:60px 40px; text-align:center;">
+      <p style="color:#9CA3AF; font-size:1rem;">Aucune organisation enregistrée</p>
+    </div>
+  <% } else { %>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px;">
+      <% organisations.forEach(org => { %>
+        <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; box-shadow:0 2px 8px rgba(0,0,0,0.04); padding:20px;">
+          <h3 style="font-size:1rem; font-weight:800; color:#2C2C2C; margin-bottom:8px;">
+            <%= org.nom %>
+          </h3>
+          <p style="font-size:0.8rem; color:#6B7280; margin-bottom:8px;">
+            <strong>Type:</strong> <%= org.type %>
+          </p>
+          <p style="font-size:0.8rem; color:#6B7280; margin-bottom:12px;">
+            <strong>Siège:</strong> <%= org.siegeSocial %>
+          </p>
+          <p style="font-size:0.75rem; color:#9CA3AF; padding:8px; background:#FFFBEB; border-radius:6px;">
+            <strong>SIREN:</strong> <%= org.siren %>
+          </p>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+</div>
+
+</body>
+</html>

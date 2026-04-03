@@ -1,0 +1,164 @@
+<%- include('../layout') %>
+
+<div style="max-width:1000px;margin:0 auto;padding:32px 24px;">
+  <a href="/offres" style="color:#FFCD00; text-decoration:none; font-weight:700; margin-bottom:20px; display:inline-block;">
+    ← Retour aux offres
+  </a>
+
+  <% if (!offre) { %>
+    <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; padding:60px 40px; text-align:center;">
+      <p style="color:#9CA3AF; font-size:1.1rem;">Offre non trouvée</p>
+    </div>
+  <% } else { %>
+    <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; box-shadow:0 2px 12px rgba(0,0,0,0.05); padding:40px;">
+      
+      <!-- Header -->
+      <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:30px; padding-bottom:30px; border-bottom:1px solid #EAECEF;">
+        <div style="flex:1;">
+          <h1 style="font-size:2rem; font-weight:900; color:#2C2C2C; margin-bottom:8px;">
+            <%= offre.fiche?.intitule || 'Offre' %>
+          </h1>
+          <p style="font-size:1rem; color:#6B7280; margin-bottom:12px;">
+            <strong>🏢 <%= offre.organisation?.nom || 'Entreprise' %></strong>
+          </p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:0.8rem; font-weight:600; padding:5px 12px; border-radius:99px; background:#FFFBEB; color:#D4A800;">
+              📍 <%= offre.fiche?.lieuMission || 'Localisation' %>
+            </span>
+            <% if (offre.fiche?.typeMetier) { %>
+              <span style="font-size:0.8rem; font-weight:600; padding:5px 12px; border-radius:99px; background:#EFF6FF; color:#1E40AF;">
+                🏷 <%= offre.fiche.typeMetier %>
+              </span>
+            <% } %>
+            <% if (offre.fiche?.rythme) { %>
+              <span style="font-size:0.8rem; font-weight:600; padding:5px 12px; border-radius:99px; background:#ECFDF5; color:#065F46;">
+                🕐 <%= offre.fiche.rythme %>
+              </span>
+            <% } %>
+          </div>
+        </div>
+        <% if (offre.fiche?.fourchetteSalaire) { %>
+          <div style="background:#FFFBEB; padding:16px 20px; border-radius:10px; text-align:center; min-width:150px;">
+            <p style="font-size:0.75rem; color:#92400E; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Salaire</p>
+            <p style="font-size:1.2rem; font-weight:900; color:#D4A800;">💰 <%= offre.fiche.fourchetteSalaire %></p>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Main content -->
+      <div style="display:grid; grid-template-columns:2fr 1fr; gap:40px;">
+        
+        <!-- Left column -->
+        <div>
+          <% if (offre.fiche?.missionsActivites) { %>
+            <div style="margin-bottom:32px;">
+              <h2 style="font-size:1.3rem; font-weight:800; color:#2C2C2C; margin-bottom:14px;">📝 Missions et activités</h2>
+              <p style="font-size:0.95rem; line-height:1.8; color:#4D4D4D;">
+                <%= offre.fiche.missionsActivites %>
+              </p>
+            </div>
+          <% } %>
+
+          <% if (offre.fiche?.competencesAttendues) { %>
+            <div style="margin-bottom:32px;">
+              <h2 style="font-size:1.3rem; font-weight:800; color:#2C2C2C; margin-bottom:14px;">🎯 Compétences attendues</h2>
+              <p style="font-size:0.95rem; line-height:1.8; color:#4D4D4D;">
+                <%= offre.fiche.competencesAttendues %>
+              </p>
+            </div>
+          <% } %>
+
+          <!-- Poste info -->
+          <div>
+            <h2 style="font-size:1.3rem; font-weight:800; color:#2C2C2C; margin-bottom:14px;">💼 Informations du poste</h2>
+            <div style="background:#FFFBEB; padding:20px; border-radius:10px;">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div>
+                  <p style="font-size:0.75rem; color:#92400E; text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:6px;">Type de contrat</p>
+                  <p style="font-size:0.95rem; color:#4D4D4D; font-weight:500;"><%= offre.fiche?.typeMetier || 'Non spécifié' %></p>
+                </div>
+                <div>
+                  <p style="font-size:0.75rem; color:#92400E; text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:6px;">Rythme</p>
+                  <p style="font-size:0.95rem; color:#4D4D4D; font-weight:500;"><%= offre.fiche?.rythme || 'Non spécifié' %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column (sidebar) -->
+        <div>
+          <!-- Entreprise -->
+          <div style="background:#fff; border:1px solid #EAECEF; border-radius:10px; padding:20px; margin-bottom:20px;">
+            <h3 style="font-size:0.95rem; font-weight:800; color:#2C2C2C; margin-bottom:12px;">🏢 À propos de l'entreprise</h3>
+            <p style="font-size:0.85rem; color:#6B7280; margin-bottom:8px;">
+              <strong><%= offre.organisation?.nom || 'Entreprise' %></strong>
+            </p>
+            <p style="font-size:0.8rem; color:#9CA3AF; margin-bottom:12px;">
+              <%= offre.organisation?.type || 'Type de structure' %>
+            </p>
+            <% if (offre.organisation?.siegeSocial) { %>
+              <p style="font-size:0.8rem; color:#9CA3AF;">
+                📍 <%= offre.organisation.siegeSocial %>
+              </p>
+            <% } %>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <% if (user && user.role === 'candidat') { %>
+              <button onclick="postuler(<%= offre.idOffre %>)" style="width:100%; padding:13px; background:#FFCD00; color:#2C2C2C; border:none; border-radius:10px; font-family:'Outfit'; font-weight:800; font-size:0.95rem; cursor:pointer; transition:all 0.18s;"
+                      onmouseover="this.style.background='#F5C200'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 16px rgba(255,205,0,0.45)';"
+                      onmouseout="this.style.background='#FFCD00'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                ✉️ Postuler maintenant
+              </button>
+            <% } else if (!user) { %>
+              <a href="/auth/login" style="display:block; padding:13px; background:#FFCD00; color:#2C2C2C; border:none; border-radius:10px; font-family:'Outfit'; font-weight:800; font-size:0.95rem; cursor:pointer; transition:all 0.18s; text-align:center; text-decoration:none;"
+                 onmouseover="this.style.background='#F5C200'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 16px rgba(255,205,0,0.45)';"
+                 onmouseout="this.style.background='#FFCD00'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                🔐 Connexion requise
+              </a>
+            <% } %>
+            <a href="/offres" style="display:block; padding:11px; background:transparent; color:#FFCD00; border:2px solid #FFCD00; border-radius:10px; font-family:'Outfit'; font-weight:600; font-size:0.85rem; cursor:pointer; transition:all 0.18s; text-align:center; text-decoration:none;"
+               onmouseover="this.style.background='#FFCD00'; this.style.color='#2C2C2C';"
+               onmouseout="this.style.background='transparent'; this.style.color='#FFCD00';">
+              ← Autres offres
+            </a>
+          </div>
+
+          <!-- Info offre -->
+          <div style="background:#ECFDF5; padding:16px; border-radius:10px; margin-top:20px; border-left:4px solid #34D399;">
+            <p style="font-size:0.75rem; color:#065F46; text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:6px;">Détails offre</p>
+            <p style="font-size:0.8rem; color:#065F46;">
+              <strong>ID :</strong> #<%= offre.idOffre %>
+            </p>
+            <p style="font-size:0.8rem; color:#065F46;">
+              <strong>Publiée :</strong> <%= new Date(offre.datePublication).toLocaleDateString('fr-FR') %>
+            </p>
+            <p style="font-size:0.8rem; color:#065F46;">
+              <strong>Valide jusqu'au :</strong> <%= new Date(offre.dateValidite).toLocaleDateString('fr-FR') %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<script>
+function postuler(idOffre) {
+  fetch('/candidatures/create/' + idOffre, { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        alert('✅ Candidature envoyée !');
+        window.location.reload();
+      } else {
+        alert('❌ ' + (data.error || 'Erreur'));
+      }
+    });
+}
+</script>
+
+</body>
+</html>

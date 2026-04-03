@@ -1,0 +1,82 @@
+<header style="background:#fff; border-bottom: 2px solid #FFCD00; position:sticky; top:0; z-index:200; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
+  <div style="max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:12px;height:60px">
+    <!-- Logo -->
+    <div style="display:flex;align-items:center;gap:10px;margin-right:8px">
+      <div style="width:36px; height:36px; background: linear-gradient(135deg,#4D4D4D 60%, #666); border-radius:10px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+        <span style="font-family:'Outfit'; font-weight:900; font-size:1.1rem; color:#FFCD00;">U</span>
+      </div>
+      <div>
+        <div style="font-family:'Outfit'; font-weight:800; font-size:1.22rem; color:#2C2C2C; letter-spacing:-0.5px;">
+          <span style="color:#FFCD00;">U-</span>Recrut
+        </div>
+        <div style="font-size:0.6rem; color:#9CA3AF; text-transform:uppercase; letter-spacing:1.5px; font-weight:500; line-height:1;">
+          Votre Talent, Notre Connection
+        </div>
+      </div>
+    </div>
+
+    <!-- Nav links -->
+    <div style="display:flex;gap:4px;flex:1;overflow-x:auto;padding:4px 0">
+      <a href="/" style="padding:7px 16px; border-radius:99px; font-size:0.82rem; font-weight:600; cursor:pointer; border:none; background:transparent; color:#6B7280; font-family:'Outfit'; transition:all 0.18s; white-space:nowrap; text-decoration:none;" 
+         onmouseover="this.style.background='#FFF3C4'; this.style.color='#4D4D4D';"
+         onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
+        🏠 Accueil
+      </a>
+      <a href="/offres" style="padding:7px 16px; border-radius:99px; font-size:0.82rem; font-weight:600; cursor:pointer; border:none; background:transparent; color:#6B7280; font-family:'Outfit'; transition:all 0.18s; white-space:nowrap; text-decoration:none;"
+         onmouseover="this.style.background='#FFF3C4'; this.style.color='#4D4D4D';"
+         onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
+        📋 Offres
+      </a>
+      <% if (user && user.role === 'recruteur') { %>
+        <a href="/candidatures/received" style="padding:7px 16px; border-radius:99px; font-size:0.82rem; font-weight:600; cursor:pointer; border:none; background:transparent; color:#6B7280; font-family:'Outfit'; transition:all 0.18s; white-space:nowrap; text-decoration:none;"
+           onmouseover="this.style.background='#FFF3C4'; this.style.color='#4D4D4D';"
+           onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
+          👥 Candidatures
+        </a>
+      <% } %>
+    </div>
+
+    <!-- Profile zone -->
+    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <% if (user) { %>
+        <div style="text-align:right">
+          <div style="font-size:0.83rem;font-weight:700;color:#2C2C2C"><%= user.prenom %> <%= user.nom %></div>
+          <div style="font-size:0.7rem;color:#9CA3AF;text-transform:capitalize"><%= user.role %></div>
+        </div>
+        <div style="width:38px; height:38px; border-radius:10px; background:#FFCD00; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:0.9rem; color:#2C2C2C;">
+          <%= user.prenom.charAt(0) %><%= user.nom.charAt(0) %>
+        </div>
+        <% if (user.role === 'candidat') { %>
+          <a href="/dashboard/candidat" style="padding:7px 16px; border-radius:10px; font-family:'Outfit'; font-weight:700; font-size:0.9rem; cursor:pointer; border:none; background:#FFCD00; color:#2C2C2C; transition:all 0.18s; text-decoration:none; display:inline-block;"
+             onmouseover="this.style.background='#F5C200'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 16px rgba(255,205,0,0.45)';"
+             onmouseout="this.style.background='#FFCD00'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+            Dashboard
+          </a>
+        <% } else if (user.role === 'recruteur') { %>
+          <a href="/dashboard/recruteur" style="padding:7px 16px; border-radius:10px; font-family:'Outfit'; font-weight:700; font-size:0.9rem; cursor:pointer; border:none; background:#FFCD00; color:#2C2C2C; transition:all 0.18s; text-decoration:none; display:inline-block;"
+             onmouseover="this.style.background='#F5C200'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 16px rgba(255,205,0,0.45)';"
+             onmouseout="this.style.background='#FFCD00'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+            Dashboard
+          </a>
+        <% } else if (user.role === 'admin') { %>
+          <a href="/dashboard/admin" style="padding:7px 16px; border-radius:10px; font-family:'Outfit'; font-weight:700; font-size:0.9rem; cursor:pointer; border:none; background:#FFCD00; color:#2C2C2C; transition:all 0.18s; text-decoration:none; display:inline-block;"
+             onmouseover="this.style.background='#F5C200'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 16px rgba(255,205,0,0.45)';"
+             onmouseout="this.style.background='#FFCD00'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+            Console
+          </a>
+        <% } %>
+        <a href="/auth/logout" style="padding:7px 16px; border-radius:10px; font-family:'Outfit'; font-weight:600; font-size:0.85rem; cursor:pointer; border:1.5px solid #D1D5DB; background:transparent; color:#4D4D4D; transition:all 0.15s; text-decoration:none; display:inline-block;"
+           onmouseover="this.style.borderColor='#9CA3AF';"
+           onmouseout="this.style.borderColor='#D1D5DB';">
+          Déconnexion
+        </a>
+      <% } else { %>
+        <a href="/auth/login" style="padding:9px 20px; border-radius:10px; font-family:'Outfit'; font-weight:600; font-size:0.85rem; cursor:pointer; border:2px solid #FFCD00; background:transparent; color:#FFCD00; transition:all 0.18s; text-decoration:none; display:inline-block;"
+           onmouseover="this.style.background='#FFCD00'; this.style.color='#2C2C2C';"
+           onmouseout="this.style.background='transparent'; this.style.color='#FFCD00';">
+          Se connecter
+        </a>
+      <% } %>
+    </div>
+  </div>
+</header>

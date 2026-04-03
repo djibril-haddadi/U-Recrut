@@ -1,0 +1,83 @@
+<%- include('../layout') %>
+
+<div style="max-width:1400px;margin:0 auto;padding:32px 24px;">
+  <a href="/dashboard/admin" style="color:#FFCD00; text-decoration:none; font-weight:700; margin-bottom:20px; display:inline-block;">
+    ← Retour à la console
+  </a>
+
+  <h1 style="font-size:2rem; font-weight:900; color:#2C2C2C; margin-bottom:24px;">
+    📋 Gestion des offres
+  </h1>
+
+  <% if (offres.length === 0) { %>
+    <div style="background:#fff; border-radius:12px; border:1px dashed #EAECEF; padding:60px 40px; text-align:center;">
+      <p style="color:#9CA3AF; font-size:1rem;">Aucune offre d'emploi</p>
+    </div>
+  <% } else { %>
+    <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.05);">
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr style="border-bottom:2px solid #EAECEF; background:#F8F9FA;">
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">ID</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Offre</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Recruteur</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Status</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Publiée</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% offres.forEach(offre => { %>
+            <tr style="border-bottom:1px solid #F3F4F6;"
+                onmouseover="this.style.background='#FFFBEB';"
+                onmouseout="this.style.background='transparent';">
+              <td style="padding:16px; font-size:0.85rem; color:#4D4D4D;"><%= offre.idOffre %></td>
+              <td style="padding:16px; font-size:0.85rem; color:#4D4D4D;">
+                <strong>Offre #<%= offre.idOffre %></strong>
+              </td>
+              <td style="padding:16px; font-size:0.85rem; color:#6B7280;">
+                ID <%= offre.idRecruteur %>
+              </td>
+              <td style="padding:16px; font-size:0.85rem;">
+                <span style="display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:99px; font-size:0.7rem; font-weight:700;
+                  background:<%= offre.statutOffre === 'publiée' ? 'rgba(16, 185, 129, 0.15); color:#065F46;' : 'rgba(239, 68, 68, 0.15); color:#991B1B;' %>">
+                  <%= offre.statutOffre === 'publiée' ? '✅ Publiée' : '❌ Archivée' %>
+                </span>
+              </td>
+              <td style="padding:16px; font-size:0.85rem; color:#6B7280;">
+                <%= new Date(offre.datePublication).toLocaleDateString('fr-FR') %>
+              </td>
+              <td style="padding:16px; font-size:0.85rem;">
+                <button onclick="supprimerOffre(<%= offre.idOffre %>)" style="padding:5px 10px; background:rgba(239, 68, 68, 0.15); border:1px solid #EF4444; color:#991B1B; border-radius:6px; font-size:0.7rem; font-weight:600; cursor:pointer; font-family:'Outfit';"
+                        onmouseover="this.style.background='rgba(239, 68, 68, 0.25)';"
+                        onmouseout="this.style.background='rgba(239, 68, 68, 0.15)';">
+                  🗑️ Supprimer
+                </button>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
+
+<script>
+function supprimerOffre(id) {
+  if (!confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')) return;
+  
+  fetch('/admin/offres/' + id + '/delete', { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        alert('✅ Offre supprimée');
+        window.location.reload();
+      } else {
+        alert('❌ Erreur');
+      }
+    });
+}
+</script>
+
+</body>
+</html>

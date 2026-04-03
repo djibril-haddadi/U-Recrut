@@ -1,0 +1,79 @@
+<%- include('../layout') %>
+
+<div style="max-width:900px;margin:0 auto;padding:32px 24px;">
+  <h1 style="font-size:2rem; font-weight:900; color:#2C2C2C; margin-bottom:24px;">
+    ➕ Créer une nouvelle offre
+  </h1>
+
+  <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; box-shadow:0 2px 12px rgba(0,0,0,0.05); padding:40px;">
+    
+    <form method="POST" action="/offres/create">
+      <div style="margin-bottom:20px;">
+        <label style="display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px;">Intitulé du poste *</label>
+        <input type="text" name="intitule" required style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#2C2C2C; outline:none; transition:border 0.18s; background:#fff;"
+               onfocus="this.style.borderColor='#FFCD00'; this.style.boxShadow='0 0 0 3px rgba(255,205,0,0.12)';"
+               onblur="this.style.borderColor='#D1D5DB'; this.style.boxShadow='none';">
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px;">Type de métier *</label>
+          <input type="text" name="typeMetier" required style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#2C2C2C; outline:none; transition:border 0.18s; background:#fff;"
+                 onfocus="this.style.borderColor='#FFCD00'; this.style.boxShadow='0 0 0 3px rgba(255,205,0,0.12)';"
+                 onblur="this.style.borderColor='#D1D5DB'; this.style.boxShadow='none';">
+        </div>
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px;">Lieu de mission *</label>
+          <input type="text" name="lieuMission" required style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#2C2C2C; outline:none; transition:border 0.18s; background:#fff;"
+                 onfocus="this.style.borderColor='#FFCD00'; this.style.boxShadow='0 0 0 3px rgba(255,205,0,0.12)';"
+                 onblur="this.style.borderColor='#D1D5DB'; this.style.boxShadow='none';">
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px;">Rythme de travail *</label>
+          <input type="text" name="rythme" placeholder="ex: CDI, Temps plein..." required style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#2C2C2C; outline:none; transition:border 0.18s; background:#fff;"
+                 onfocus="this.style.borderColor='#FFCD00'; this.style.boxShadow='0 0 0 3px rgba(255,205,0,0.12)';"
+                 onblur="this.style.borderColor='#D1D5DB'; this.style.boxShadow='none';">
+        </div>
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px;">Fourchette salariale</label>
+          <input type="text" name="fourchetteSalaire" placeholder="ex: 30k - 40k €" style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#2C2C2C; outline:none; transition:border 0.18s; background:#fff;"
+                 onfocus="this.style.borderColor='#FFCD00'; this.style.boxShadow='0 0 0 3px rgba(255,205,0,0.12)';"
+                 onblur="this.style.borderColor='#D1D5DB'; this.style.boxShadow='none';">
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <label style="display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px;">Missions et activités *</label>
+        <textarea name="missionsActivites" required rows="6" style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#2C2C2C; outline:none; transition:border 0.18s; background:#fff; resize:vertical;"
+                  onfocus="this.style.borderColor='#FFCD00'; this.style.boxShadow='0 0 0 3px rgba(255,205,0,0.12)';"
+                  onblur="this.style.borderColor='#D1D5DB'; this.style.boxShadow='none';">Décrivez les principales missions et activités du poste...</textarea>
+      </div>
+
+      <div style="margin-bottom:24px;">
+        <label style="display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px;">Compétences attendues *</label>
+        <textarea name="competencesAttendues" required rows="6" style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#2C2C2C; outline:none; transition:border 0.18s; background:#fff; resize:vertical;"
+                  onfocus="this.style.borderColor='#FFCD00'; this.style.boxShadow='0 0 0 3px rgba(255,205,0,0.12)';"
+                  onblur="this.style.borderColor='#D1D5DB'; this.style.boxShadow='none';">Listez les compétences requises pour le poste...</textarea>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button type="submit" style="flex:1; padding:13px; background:#FFCD00; color:#2C2C2C; border:none; border-radius:10px; font-family:'Outfit'; font-weight:800; font-size:0.95rem; cursor:pointer; transition:all 0.18s;"
+                onmouseover="this.style.background='#F5C200'; this.style.boxShadow='0 4px 18px rgba(255,205,0,0.45)';"
+                onmouseout="this.style.background='#FFCD00'; this.style.boxShadow='none';">
+          📤 Publier l'offre
+        </button>
+        <a href="/dashboard/recruteur" style="flex:1; display:flex; align-items:center; justify-content:center; padding:13px; background:transparent; color:#FFCD00; border:2px solid #FFCD00; border-radius:10px; font-family:'Outfit'; font-weight:600; font-size:0.85rem; cursor:pointer; transition:all 0.18s; text-decoration:none;"
+           onmouseover="this.style.background='#FFCD00'; this.style.color='#2C2C2C';"
+           onmouseout="this.style.background='transparent'; this.style.color='#FFCD00';">
+          Annuler
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

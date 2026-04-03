@@ -1,0 +1,122 @@
+<%- include('../layout') %>
+
+<div style="max-width:1400px;margin:0 auto;padding:32px 24px;">
+  <h1 style="font-size:2rem; font-weight:900; color:#2C2C2C; margin-bottom:24px;">
+    👥 Candidatures reçues
+  </h1>
+
+  <% if (candidatures.length === 0) { %>
+    <div style="background:#fff; border-radius:12px; border:1px dashed #EAECEF; padding:60px 40px; text-align:center;">
+      <p style="color:#9CA3AF; font-size:1.1rem; margin-bottom:20px;">Aucune candidature reçue pour le moment</p>
+      <a href="/offres/create" style="display:inline-block; padding:11px 26px; background:#FFCD00; color:#2C2C2C; text-decoration:none; border-radius:10px; font-weight:700; transition:all 0.18s;"
+         onmouseover="this.style.background='#F5C200';"
+         onmouseout="this.style.background='#FFCD00';">
+        Créer une offre
+      </a>
+    </div>
+  <% } else { %>
+    <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; box-shadow:0 2px 12px rgba(0,0,0,0.05); overflow:hidden;">
+      
+      <!-- Table -->
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr style="border-bottom:2px solid #EAECEF; background:#F8F9FA;">
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">Candidat</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">Offre</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">Date</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">État</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% candidatures.forEach((cand, idx) => { %>
+            <tr style="border-bottom:1px solid #F3F4F6; transition:background 0.12s;"
+                onmouseover="this.style.background='#FFFBEB';"
+                onmouseout="this.style.background='transparent';">
+              
+              <!-- Candidat -->
+              <td style="padding:16px; font-size:0.86rem; color:#4D4D4D; vertical-align:middle;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div style="width:36px; height:36px; border-radius:8px; background:#FFCD00; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:0.75rem; color:#2C2C2C;">
+                    <%= cand.candidat?.prenom?.charAt(0) || '?' %><%= cand.candidat?.nom?.charAt(0) || '?' %>
+                  </div>
+                  <div>
+                    <p style="font-weight:600; margin:0;">
+                      <%= cand.candidat?.prenom %> <%= cand.candidat?.nom %>
+                    </p>
+                    <p style="font-size:0.75rem; color:#9CA3AF; margin:0;">
+                      <%= cand.candidat?.email %>
+                    </p>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Offre -->
+              <td style="padding:16px; font-size:0.86rem; color:#4D4D4D; vertical-align:middle;">
+                <a href="/offres/<%= cand.offre?.idOffre %>" style="color:#FFCD00; text-decoration:none; font-weight:600;">
+                  <%= cand.fiche?.intitule || 'Offre' %>
+                </a>
+              </td>
+
+              <!-- Date -->
+              <td style="padding:16px; font-size:0.86rem; color:#4D4D4D; vertical-align:middle;">
+                <%= new Date(cand.dateCandidature).toLocaleDateString('fr-FR') %>
+              </td>
+
+              <!-- État -->
+              <td style="padding:16px; font-size:0.86rem; vertical-align:middle;">
+                <span style="display:inline-flex; align-items:center; gap:5px; padding:6px 12px; border-radius:99px; font-size:0.75rem; font-weight:700;
+                  background:<% 
+                    if (cand.etatCandidature === 'en attente') { %>rgba(245, 158, 11, 0.15); color:#92400E; <% }
+                    else if (cand.etatCandidature === 'entretien') { %>rgba(30, 64, 175, 0.15); color:#1E40AF; <% }
+                    else if (cand.etatCandidature === 'acceptée') { %>rgba(16, 185, 129, 0.15); color:#065F46; <% }
+                    else if (cand.etatCandidature === 'rejetée') { %>rgba(239, 68, 68, 0.15); color:#991B1B; <% } %>">
+                  <% if (cand.etatCandidature === 'en attente') { %>⏳ <% }
+                     else if (cand.etatCandidature === 'entretien') { %>📞 <% }
+                     else if (cand.etatCandidature === 'acceptée') { %>✅ <% }
+                     else if (cand.etatCandidature === 'rejetée') { %>❌ <% } %>
+                    <%= cand.etatCandidature.charAt(0).toUpperCase() + cand.etatCandidature.slice(1) %>
+                  </span>
+              </td>
+
+              <!-- Actions -->
+              <td style="padding:16px; font-size:0.86rem; vertical-align:middle;">
+                <select onchange="mettreAJourEtat(<%= cand.idCandidature %>, this.value)" style="padding:6px 8px; border:1px solid #D1D5DB; border-radius:6px; font-size:0.75rem; font-family:'Outfit'; color:#4D4D4D; background:#fff; outline:none; cursor:pointer;">
+                  <option value="">-- Changer l'état --</option>
+                  <option value="en attente" <%= cand.etatCandidature === 'en attente' ? 'selected' : '' %>>⏳ En attente</option>
+                  <option value="entretien" <%= cand.etatCandidature === 'entretien' ? 'selected' : '' %>>📞 Entretien</option>
+                  <option value="acceptée" <%= cand.etatCandidature === 'acceptée' ? 'selected' : '' %>>✅ Acceptée</option>
+                  <option value="rejetée" <%= cand.etatCandidature === 'rejetée' ? 'selected' : '' %>>❌ Rejetée</option>
+                </select>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
+
+<script>
+function mettreAJourEtat(idCandidature, nouvelEtat) {
+  if (!nouvelEtat) return;
+  
+  fetch('/candidatures/' + idCandidature, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ etat: nouvelEtat })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      alert('✅ Candidature mise à jour !');
+      window.location.reload();
+    } else {
+      alert('❌ ' + (data.error || 'Erreur'));
+    }
+  });
+}
+</script>
+
+</body>
+</html>
