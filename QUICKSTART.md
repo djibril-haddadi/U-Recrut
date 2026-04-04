@@ -22,8 +22,8 @@ Accédez à : **http://localhost:3000**
 - Mot de passe: `mdp123`
 
 ### Recruteur
-- Email: `nadia@test.com`
-- Mot de passe: `mdp456`
+- Email: `thomas.laurent@techcorp.com`
+- Mot de passe: `recruiter1`
 
 Ou créez un compte en vous inscrivant via le formulaire.
 

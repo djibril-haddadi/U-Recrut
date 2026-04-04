@@ -34,33 +34,6 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-/* GET détail d'une offre */
-router.get('/:id', async (req, res, next) => {
-  try {
-    let offre = await offreEmploi.read(req.params.id);
-    if (!offre) {
-      return res.status(404).render('error', { 
-        message: 'Offre non trouvée',
-        error: {} 
-      });
-    }
-
-    const fiche = await fichePoste.read(offre.idFichePoste);
-    const rec = await recruteur.read(offre.idRecruteur);
-    const user = rec ? await utilisateur.read(rec.idRecruteur) : null;
-    const org = rec ? await organisation.read(rec.sirenOrganisation) : null;
-
-    offre = { ...offre, fiche, recruteur: user, organisation: org };
-
-    res.render('offres/detail', { 
-      title: offre.fiche?.intitule + ' - U-Recrut',
-      offre 
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
 /* GET page créer offre (recruteur) */
 router.get('/create', requireAuth, (req, res) => {
   if (req.session.user.role !== 'recruteur') {
@@ -109,6 +82,33 @@ router.post('/create', requireAuth, async (req, res, next) => {
     });
 
     res.redirect('/offres/' + offre.insertId);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/* GET détail d'une offre */
+router.get('/:id', async (req, res, next) => {
+  try {
+    let offre = await offreEmploi.read(req.params.id);
+    if (!offre) {
+      return res.status(404).render('error', { 
+        message: 'Offre non trouvée',
+        error: {} 
+      });
+    }
+
+    const fiche = await fichePoste.read(offre.idFichePoste);
+    const rec = await recruteur.read(offre.idRecruteur);
+    const user = rec ? await utilisateur.read(rec.idRecruteur) : null;
+    const org = rec ? await organisation.read(rec.sirenOrganisation) : null;
+
+    offre = { ...offre, fiche, recruteur: user, organisation: org };
+
+    res.render('offres/detail', { 
+      title: offre.fiche?.intitule + ' - U-Recrut',
+      offre 
+    });
   } catch (err) {
     next(err);
   }
