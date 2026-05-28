@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var session = require('express-session');
+var session = require('./session');
 
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
@@ -19,12 +19,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Session setup
-app.use(session({
-  secret: 'u-recrut-secret-key',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 7 jours
-}));
+app.use(session.init());
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -33,10 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware pour passer user en local
-app.use((req, res, next) => {
-  res.locals.user = req.session.user || null;
-  next();
-});
+app.use(session.attachUserLocals);
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);

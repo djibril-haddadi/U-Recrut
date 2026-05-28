@@ -4,6 +4,7 @@ var utilisateur = require('../model/utilisateur');
 var candidat = require('../model/candidat');
 var recruteur = require('../model/recruteur');
 var administrateur = require('../model/administrateur');
+var session = require('../session');
 
 /* GET login page */
 router.get('/login', (req, res) => {
@@ -45,6 +46,7 @@ router.post('/login', async (req, res, next) => {
       email: user.email,
       role: role
     };
+    session.creatSession(req.session, user.email, role);
 
     if (role === 'candidat') {
       res.redirect('/dashboard/candidat');
@@ -104,6 +106,7 @@ router.post('/register', async (req, res, next) => {
       email,
       role: role || 'candidat'
     };
+    session.creatSession(req.session, email, role || 'candidat');
 
     if (role === 'candidat') {
       res.redirect('/dashboard/candidat');
@@ -118,10 +121,13 @@ router.post('/register', async (req, res, next) => {
 });
 
 /* GET logout */
-router.get('/logout', (req, res) => {
-  req.session.destroy(() => {
+router.get('/logout', async (req, res, next) => {
+  try {
+    session.deleteSession(req.session);
     res.redirect('/');
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
