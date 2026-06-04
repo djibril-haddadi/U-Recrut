@@ -4,6 +4,8 @@ var utilisateur = require('../model/utilisateur');
 var candidat = require('../model/candidat');
 var recruteur = require('../model/recruteur');
 var administrateur = require('../model/administrateur');
+var demandeRecruteur = require('../model/demande_recruteur');
+var organisationModel = require('../model/organisation');
 var session = require('../session');
 
 /* GET login page */
@@ -25,18 +27,29 @@ router.post('/login', async (req, res, next) => {
       });
     }
 
+    if (user.statutCompte !== 'actif') {
+      const message = user.statutCompte === 'en_attente'
+        ? 'Votre compte est en attente d’approbation. Un administrateur doit valider votre demande avant que vous puissiez vous connecter.'
+        : 'Votre compte n’est pas actif. Veuillez contacter un administrateur.';
+      return res.render('auth/login', {
+        title: 'Connexion - U-Recrut',
+        error: null,
+        message
+      });
+    }
+
     // Déterminer le rôle
     let role = 'user';
-    const candCheck = await candidat.readAll();
     const recCheck = await recruteur.readAll();
+    const candCheck = await candidat.readAll();
     const admCheck = await administrateur.readAll();
 
-    if (candCheck.some(c => c.idCandidat === user.idUtilisateur)) {
-      role = 'candidat';
+    if (admCheck.some(a => a.idAdministrateur === user.idUtilisateur)) {
+      role = 'admin';
     } else if (recCheck.some(r => r.idRecruteur === user.idUtilisateur)) {
       role = 'recruteur';
-    } else if (admCheck.some(a => a.idAdministrateur === user.idUtilisateur)) {
-      role = 'admin';
+    } else if (candCheck.some(c => c.idCandidat === user.idUtilisateur)) {
+      role = 'candidat';
     }
 
     req.session.user = {
@@ -63,21 +76,49 @@ router.post('/login', async (req, res, next) => {
 });
 
 /* GET register page */
-router.get('/register', (req, res) => {
-  res.render('auth/register', { title: 'Inscription - U-Recrut' });
+router.get('/register', async (req, res, next) => {
+  try {
+    const organisations = await organisationModel.readAll();
+    res.render('auth/register', {
+      title: 'Inscription - U-Recrut',
+      formAction: '/auth/register',
+      error: null,
+      organisations,
+      selectedOrganisation: null,
+      selectedRole: null
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 /* POST register */
 router.post('/register', async (req, res, next) => {
   try {
-    const { nom, prenom, email, password, role } = req.body;
-    
+    const { nom, prenom, email, password, role, sirenOrganisation } = req.body;
+    const organisations = await organisationModel.readAll();
+
     // Vérifier si l'email existe déjà
     const users = await utilisateur.readAll();
     if (users.some(u => u.email === email)) {
-      return res.render('auth/register', { 
+      return res.render('auth/register', {
         title: 'Inscription - U-Recrut',
-        error: 'Cet email est déjà utilisé' 
+        formAction: '/auth/register',
+        error: 'Cet email est déjà utilisé',
+        organisations,
+        selectedOrganisation: sirenOrganisation,
+        selectedRole: role
+      });
+    }
+
+    if (role === 'recruteur' && !sirenOrganisation) {
+      return res.render('auth/register', {
+        title: 'Inscription - U-Recrut',
+        formAction: '/auth/register',
+        error: 'Veuillez choisir une organisation',
+        organisations,
+        selectedOrganisation: sirenOrganisation,
+        selectedRole: role
       });
     }
 
@@ -88,33 +129,49 @@ router.post('/register', async (req, res, next) => {
       email,
       motDePasseHash: password,
       dateCreation: new Date(),
-      statutCompte: 'actif'
+      statutCompte: role === 'recruteur' ? 'en_attente' : 'actif'
     });
 
-    // Créer le candidat ou recruteur
+    // Créer le candidat ou la demande recruteur
     if (role === 'candidat') {
       await candidat.create({ idCandidat: newUser.insertId });
-    } else if (role === 'recruteur') {
-      const recData = await recruteur.create({ idRecruteur: newUser.insertId });
+      req.session.user = {
+        id: newUser.insertId,
+        nom,
+        prenom,
+        email,
+        role: 'candidat'
+      };
+      session.creatSession(req.session, email, 'candidat');
+      return res.redirect('/dashboard/candidat');
     }
 
-    // Connecter automatiquement
+    if (role === 'recruteur') {
+      await candidat.create({ idCandidat: newUser.insertId });
+      await demandeRecruteur.create({
+        dateDemande: new Date(),
+        statutDemande: 'en_attente',
+        idCandidat: newUser.insertId,
+        sirenOrganisation: sirenOrganisation
+      });
+
+      return res.render('auth/login', {
+        title: 'Connexion - U-Recrut',
+        message: 'Votre demande de recruteur a bien été envoyée. Un administrateur doit l’approuver avant que votre compte puisse accéder aux fonctionnalités recruteur.',
+        error: null
+      });
+    }
+
+    // Connecter automatiquement si le rôle n'est pas définissable
     req.session.user = {
       id: newUser.insertId,
       nom,
       prenom,
       email,
-      role: role || 'candidat'
+      role: 'user'
     };
-    session.creatSession(req.session, email, role || 'candidat');
-
-    if (role === 'candidat') {
-      res.redirect('/dashboard/candidat');
-    } else if (role === 'recruteur') {
-      res.redirect('/dashboard/recruteur');
-    } else {
-      res.redirect('/');
-    }
+    session.creatSession(req.session, email, 'user');
+    res.redirect('/');
   } catch (err) {
     next(err);
   }

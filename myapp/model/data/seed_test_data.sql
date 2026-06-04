@@ -65,31 +65,36 @@ INSERT INTO `administrateur` (`idAdministrateur`) VALUES
 -- ============================================================
 -- 6. FICHES DE POSTE
 -- ============================================================
-INSERT INTO `fiche_poste` (`idFichePoste`, `intitule`, `statutPoste`, `responsableHierarchique`, `typeMetier`, `lieuMission`, `rythme`, `fourchetteSalaire`, `missionsActivites`, `competencesAttendues`, `sirenOrganisation`) VALUES
+INSERT INTO `fiche_poste` (`idFichePoste`, `intitule`, `statutPoste`, `responsableHierarchique`, `typeMetier`, `lieuMission`, `rythme`, `fourchetteSalaire`, `missionsActivites`, `competencesAttendues`, `pieceJointeAttendue`, `sirenOrganisation`) VALUES
 
 (1, 'Développeur Full Stack (Node.js/React)', 'CDI', 'Directeur Technique', 'Développement Web', 'Paris (75)', 'Temps plein - Hybride (3j/semaine)', '38000-48000€ brut/an', 
 '- Développer des applications web modernes et performantes\n- Créer et maintenir des APIs REST\n- Collaborer avec le design et le product management\n- Optimiser les performances et la scalabilité\n- Participer aux code reviews',
 '- JavaScript/Node.js (obligatoire)\n- React ou Vue.js\n- SQL et bases de données relationnelles\n- Git\n- Expérience avec Docker souhaitée\n- Anglais courant',
+NULL,
 '12345678901234'),
 
 (2, 'Data Scientist / Machine Learning Engineer', 'CDI', 'Head of Data', 'Data Science', 'Lille (59)', 'Temps plein - 100% télétravail possible', '42000-55000€ brut/an',
 '- Développer des modèles de machine learning\n- Analyser des grandes volumes de données\n- Créer des pipelines de données ETL\n- Faire du A/B testing et de l\'expérimentation\n- Documenter les modèles et les méthodologies',
 '- Python (sklearn, pandas, numpy)\n- TensorFlow ou PyTorch\n- SQL et gestion BD\n- Statistiques appliquées\n- Communication des insights metier',
+NULL,
 '98765432109876'),
 
 (3, 'Consultant Business Intelligence / Analytics', 'CDI', 'Manager Consulting', 'Consulting', 'Bordeaux (33)', 'Temps plein - Mobilité acceptable (30%)', '35000-45000€ brut/an',
 '- Accompagner clients dans leur transformation digitale\n- Concevoir des solutions BI\n- Analyser les processus métier\n- Présenter des recommandations aux décideurs\n- Gérer les projets de bout en bout',
 '- Excellentes capacités d\'analyse\n- Power BI ou Tableau\n- SQL avancé\n- Excel expert\n- Soft skills: communication, leadership, negociation',
+NULL,
 '11111111111111'),
 
 (4, 'QA Engineer / Test Automation', 'CDI', 'Tech Lead QA', 'Quality Assurance', 'Paris (75)', 'Temps plein - Sur site preferé', '32000-40000€ brut/an',
 '- Écrire et exécuter des cas de test\n- Automatiser les tests de régression\n- Identifier et documenter les bugs\n- Participer à la stratégie QA\n- Collaborer avec les développeurs',
 '- Selenium ou Cypress\n- Python ou JavaScript pour l\'automation\n- SQL pour tester les données\n- Jira/Azure DevOps\n- Méthodologies Agile',
+NULL,
 '12345678901234'),
 
 (5, 'Développeur Backend Python', 'CDI', 'Tech Lead Backend', 'Développement Backend', 'Lille (59)', 'Temps plein - Hybride', '40000-50000€ brut/an',
 '- Développer des services backend scalables\n- Créer des APIs RESTful\n- Gérer les bases de données\n- Optimiser les performances\n- Mettre en place CI/CD',
 '- Python 3.x (obligatoire)\n- Django ou FastAPI\n- PostgreSQL ou MongoDB\n- Docker et Kubernetes notions\n- Git et Linux',
+NULL,
 '98765432109876');
 
 -- ============================================================

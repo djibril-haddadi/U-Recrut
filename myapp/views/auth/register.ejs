@@ -21,7 +21,7 @@
         </div>
       <% } %>
 
-      <form method="POST" action="/auth/register">
+      <form method="POST" action="<%= formAction || '/auth/register' %>">
         <div style="margin-bottom:14px;">
           <label style="display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px;">Nom</label>
           <input type="text" name="nom" required style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#2C2C2C; outline:none; transition:border 0.18s; background:#fff;"
@@ -52,12 +52,24 @@
 
         <div style="margin-bottom:22px;">
           <label style="display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px;">Je suis...</label>
-          <select name="role" required style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#4D4D4D; background:#fff; outline:none; appearance:none; background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\"); background-repeat:no-repeat; background-position:right 14px center; padding-right:40px;"
+          <select id="roleSelect" name="role" required style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#4D4D4D; background:#fff; outline:none; appearance:none; background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\"); background-repeat:no-repeat; background-position:right 14px center; padding-right:40px;"
                    onfocus="this.style.borderColor='#FFCD00';"
                    onblur="this.style.borderColor='#D1D5DB';">
             <option value="">-- Sélectionner --</option>
-            <option value="candidat">Un candidat à la recherche d'emploi</option>
-            <option value="recruteur">Un recruteur</option>
+            <option value="candidat" <%= selectedRole === 'candidat' ? 'selected' : '' %>>Un candidat à la recherche d'emploi</option>
+            <option value="recruteur" <%= selectedRole === 'recruteur' ? 'selected' : '' %>>Un recruteur</option>
+          </select>
+        </div>
+
+        <div id="organisationField" style="display:<%= selectedRole === 'recruteur' ? 'block' : 'none' %>; margin-bottom:22px;">
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#3A3A3A; margin-bottom:6px;">Organisation</label>
+          <select name="sirenOrganisation" style="width:100%; padding:11px 14px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:0.9rem; font-family:'Outfit'; color:#4D4D4D; background:#fff; outline:none; appearance:none; background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\"); background-repeat:no-repeat; background-position:right 14px center; padding-right:40px;">
+            <option value="">-- Sélectionner une organisation --</option>
+            <% if (typeof organisations !== 'undefined' && organisations.length) { %>
+              <% organisations.forEach(function(org) { %>
+                <option value="<%= org.siren %>" <%= String(selectedOrganisation) === String(org.siren) ? 'selected' : '' %>><%= org.nom || org.raison_sociale || org.nomOrganisation || 'Organisation inconnue' %> (<%= org.siren %>)</option>
+              <% }); %>
+            <% } %>
           </select>
         </div>
 
@@ -67,6 +79,15 @@
           S'inscrire
         </button>
       </form>
+      <script>
+        const roleSelect = document.getElementById('roleSelect');
+        const organisationField = document.getElementById('organisationField');
+        if (roleSelect && organisationField) {
+          roleSelect.addEventListener('change', function() {
+            organisationField.style.display = this.value === 'recruteur' ? 'block' : 'none';
+          });
+        }
+      </script>
 
       <div style="margin-top:20px; padding-top:20px; border-top:1px solid #EAECEF; text-align:center;">
         <p style="font-size:0.85rem; color:#6B7280; margin-bottom:8px;">Vous avez déjà un compte ?</p>

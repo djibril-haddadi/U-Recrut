@@ -120,6 +120,7 @@ CREATE TABLE `fiche_poste` (
   `fourchetteSalaire` varchar(100) DEFAULT NULL,
   `missionsActivites` text DEFAULT NULL,
   `competencesAttendues` text DEFAULT NULL,
+  `pieceJointeAttendue` text DEFAULT NULL,
   `sirenOrganisation` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

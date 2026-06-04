@@ -1,0 +1,75 @@
+<%- include('../layout') %>
+
+<div style="display:flex; min-height:calc(100vh - 60px);">
+  <%- include('../partials/recruteur_sidebar', { activePage: 'organisation-offres' }) %>
+
+  <main style="flex:1; padding:32px 24px; background:#F8F9FA;">
+    <h1 style="font-size:2rem; font-weight:900; color:#2C2C2C; margin-bottom:24px;">
+      📋 <%= title || 'Offres de mon organisation' %>
+    </h1>
+    
+    <% if (offres.length === 0) { %>
+      <div style="background:#fff; border-radius:12px; border:1px dashed #EAECEF; padding:60px 40px; text-align:center;">
+        <p style="color:#9CA3AF; font-size:1.1rem; margin-bottom:20px;">Aucune offre pour l'organisation pour le moment</p>
+        <a href="/offres/create" style="display:inline-block; padding:11px 26px; background:#FFCD00; color:#2C2C2C; text-decoration:none; border-radius:10px; font-weight:700; transition:all 0.18s;"
+           onmouseover="this.style.background='#F5C200';"
+           onmouseout="this.style.background='#FFCD00';">
+          Créer une offre
+        </a>
+      </div>
+    <% } else { %>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:20px">
+        <% offres.forEach(offre => { %>
+          <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; box-shadow:0 2px 12px rgba(0,0,0,0.05); transition:all 0.2s; cursor:pointer; padding:24px;"
+               onmouseover="this.style.boxShadow='0 8px 28px rgba(0,0,0,0.10)'; this.style.transform='translateY(-2px)'; this.style.borderColor='#FFE57A';"
+               onmouseout="this.style.boxShadow='0 2px 12px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)'; this.style.borderColor='#EAECEF';">
+            <div style="margin-bottom:16px;">
+              <h3 style="font-size:1.1rem; font-weight:800; color:#2C2C2C; margin-bottom:8px;">
+                <%= offre.fiche?.intitule || 'Offre' %>
+              </h3>
+              <p style="font-size:0.85rem; color:#6B7280;">
+                <strong>🏢 <%= offre.organisation?.nom || 'Entreprise' %></strong>
+              </p>
+              <p style="font-size:0.82rem; color:#9CA3AF;">
+                📍 <%= offre.fiche?.lieuMission || 'Localisation' %>
+              </p>
+            </div>
+
+            <div style="margin-bottom:16px; padding:12px; background:#FFFBEB; border-radius:8px;">
+              <p style="font-size:0.75rem; color:#92400E; margin-bottom:4px;"><strong>🏷 Type</strong></p>
+              <p style="font-size:0.85rem; color:#D4A800;"><%= offre.fiche?.typeMetier || 'N/A' %></p>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+              <% if (offre.fiche?.rythme) { %>
+                <span style="font-size:0.72rem; font-weight:600; padding:4px 10px; border-radius:99px; background:#EFF6FF; color:#1E40AF;">
+                  🕐 <%= offre.fiche.rythme %>
+                </span>
+              <% } %>
+              <% if (offre.fiche?.fourchetteSalaire) { %>
+                <span style="font-size:0.72rem; font-weight:600; padding:4px 10px; border-radius:99px; background:#ECFDF5; color:#065F46;">
+                  💰 <%= offre.fiche.fourchetteSalaire %>
+                </span>
+              <% } %>
+            </div>
+
+            <p style="font-size:0.82rem; color:#4D4D4D; line-height:1.6; margin-bottom:16px;">
+              <%= offre.fiche?.missionsActivites?.substring(0, 100) || 'Description disponible au détail' %>...
+            </p>
+
+            <div style="display:flex; gap:8px;">
+              <a href="/offres/<%= offre.idOffre %>" style="flex:1; display:block; padding:10px 14px; background:#FFCD00; color:#2C2C2C; text-decoration:none; border-radius:8px; font-size:0.8rem; font-weight:700; cursor:pointer; transition:all 0.18s; border:none; text-align:center;"
+                 onmouseover="this.style.background='#F5C200';"
+                 onmouseout="this.style.background='#FFCD00';">
+                Voir détail
+              </a>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </main>
+</div>
+
+</body>
+</html>

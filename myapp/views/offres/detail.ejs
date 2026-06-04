@@ -107,11 +107,11 @@
           <!-- CTA Buttons -->
           <div style="display:flex; flex-direction:column; gap:10px;">
             <% if (user && user.role === 'candidat') { %>
-              <button onclick="postuler(<%= offre.idOffre %>)" style="width:100%; padding:13px; background:#FFCD00; color:#2C2C2C; border:none; border-radius:10px; font-family:'Outfit'; font-weight:800; font-size:0.95rem; cursor:pointer; transition:all 0.18s;"
-                      onmouseover="this.style.background='#F5C200'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 16px rgba(255,205,0,0.45)';"
-                      onmouseout="this.style.background='#FFCD00'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                ✉️ Postuler maintenant
-              </button>
+              <a href="/candidatures/create/<%= offre.idOffre %>" style="width:100%; display:inline-flex; justify-content:center; padding:13px; background:#FFCD00; color:#2C2C2C; border:none; border-radius:10px; font-family:'Outfit'; font-weight:800; font-size:0.95rem; text-decoration:none; transition:all 0.18s;"
+                 onmouseover="this.style.background='#F5C200'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 16px rgba(255,205,0,0.45)';"
+                 onmouseout="this.style.background='#FFCD00'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                ✉️ Postuler avec document
+              </a>
             <% } else if (!user) { %>
               <a href="/auth/login" style="display:block; padding:13px; background:#FFCD00; color:#2C2C2C; border:none; border-radius:10px; font-family:'Outfit'; font-weight:800; font-size:0.95rem; cursor:pointer; transition:all 0.18s; text-align:center; text-decoration:none;"
                  onmouseover="this.style.background='#F5C200'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 16px rgba(255,205,0,0.45)';"
@@ -144,21 +144,6 @@
     </div>
   <% } %>
 </div>
-
-<script>
-function postuler(idOffre) {
-  fetch('/candidatures/create/' + idOffre, { method: 'POST' })
-    .then(r => r.json())
-    .then(data => {
-      if (data.success) {
-        alert('✅ Candidature envoyée !');
-        window.location.reload();
-      } else {
-        alert('❌ ' + (data.error || 'Erreur'));
-      }
-    });
-}
-</script>
 
 </body>
 </html>

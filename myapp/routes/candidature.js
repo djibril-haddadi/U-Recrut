@@ -1,10 +1,15 @@
 var express = require('express');
 var router = express.Router();
+var path = require('path');
+var fs = require('fs');
+var multer = require('multer');
 var candidature = require('../model/candidature');
 var offreEmploi = require('../model/offre_emploi');
 var fichePoste = require('../model/fiche_poste');
 var utilisateur = require('../model/utilisateur');
 var candidat = require('../model/candidat');
+var recruteur = require('../model/recruteur');
+var documentCandidature = require('../model/document_candidature');
 
 // Middleware : vérifier l'authentification
 const requireAuth = (req, res, next) => {
@@ -14,8 +19,38 @@ const requireAuth = (req, res, next) => {
   next();
 };
 
+const uploadDir = path.join(__dirname, '..', 'public', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadDir),
+  filename: (req, file, cb) => {
+    const safeName = file.originalname.replace(/[^a-zA-Z0-9_.-]/g, '_');
+    cb(null, `${Date.now()}_${safeName}`);
+  }
+});
+const upload = multer({ storage });
+
+/* GET formulaire de candidature avec upload */
+router.get('/create/:idOffre', requireAuth, async (req, res, next) => {
+  try {
+    if (req.session.user.role !== 'candidat') {
+      return res.status(403).render('error', { message: 'Accès réservé aux candidats', error: {} });
+    }
+
+    res.render('candidatures/create', {
+      title: 'Postuler à une offre - U-Recrut',
+      idOffre: req.params.idOffre
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 /* POST postuler à une offre */
-router.post('/create/:idOffre', requireAuth, async (req, res, next) => {
+router.post('/create/:idOffre', requireAuth, upload.single('document'), async (req, res, next) => {
   try {
     if (req.session.user.role !== 'candidat') {
       return res.status(403).json({ error: 'Accès réservé aux candidats' });
@@ -46,7 +81,21 @@ router.post('/create/:idOffre', requireAuth, async (req, res, next) => {
       idOffre: req.params.idOffre
     });
 
-    res.json({ success: true, id: newCandidature.insertId, message: 'Candidature envoyée' });
+    if (req.file) {
+      await documentCandidature.create({
+        nomFichier: req.file.originalname,
+        typeDocument: req.file.mimetype,
+        cheminStockage: '/uploads/' + req.file.filename,
+        dateDepot: new Date(),
+        idCandidature: newCandidature.insertId
+      });
+    }
+
+    if (req.headers.accept && req.headers.accept.includes('application/json')) {
+      return res.json({ success: true, id: newCandidature.insertId, message: 'Candidature envoyée' });
+    }
+
+    res.redirect('/candidatures');
   } catch (err) {
     next(err);
   }
@@ -100,20 +149,35 @@ router.get('/received', requireAuth, async (req, res, next) => {
       });
     }
 
-    // Récupérer toutes les offres du recruteur
+    // Récupérer l'organisation du recruteur
+    const recruteurs = await recruteur.readAll();
+    const recruteurEnCours = recruteurs.find(r => r.idRecruteur === req.session.user.id);
+    if (!recruteurEnCours || !recruteurEnCours.sirenOrganisation) {
+      return res.status(404).render('error', {
+        message: 'Organisation du recruteur introuvable',
+        error: {}
+      });
+    }
+
+    const recruteursOrganisation = recruteurs
+      .filter(r => r.sirenOrganisation === recruteurEnCours.sirenOrganisation)
+      .map(r => r.idRecruteur);
+
+    // Récupérer toutes les offres de l'organisation
     const offres = await offreEmploi.readAll();
-    const mesOffres = offres.filter(o => o.idRecruteur === req.session.user.id);
-    const mesOffresIds = mesOffres.map(o => o.idOffre);
+    const offresOrganisation = offres.filter(o => recruteursOrganisation.includes(o.idRecruteur));
+    const offresOrganisationIds = offresOrganisation.map(o => o.idOffre);
 
     // Récupérer les candidatures pour ces offres
     const candidatures = await candidature.readAll();
-    const mesCandidatures = candidatures.filter(c => mesOffresIds.includes(c.idOffre));
+    const mesCandidatures = candidatures.filter(c => offresOrganisationIds.includes(c.idOffre));
 
     const candidaturesAvecDetails = await Promise.all(mesCandidatures.map(async (cand) => {
       const offre = await offreEmploi.read(cand.idOffre);
       const fiche = offre ? await fichePoste.read(offre.idFichePoste) : null;
       const user = await utilisateur.read(cand.idCandidat);
-      return { ...cand, offre, fiche, candidat: user };
+      const document = await documentCandidature.readByCandidatureId(cand.idCandidature);
+      return { ...cand, offre, fiche, candidat: user, document };
     }));
 
     res.render('candidatures/received', { 

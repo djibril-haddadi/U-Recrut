@@ -17,6 +17,7 @@ const requireAuth = (req, res, next) => {
 /* GET liste des offres */
 router.get('/', async (req, res, next) => {
   try {
+    const search = (req.query.search || '').trim();
     const offres = await offreEmploi.readAll();
     const offresAvecDetails = await Promise.all(offres.map(async (offre) => {
       const fiche = await fichePoste.read(offre.idFichePoste);
@@ -24,10 +25,27 @@ router.get('/', async (req, res, next) => {
       const org = rec ? await organisation.read(rec.sirenOrganisation) : null;
       return { ...offre, fiche, organisation: org };
     }));
-    
-    res.render('offres/list', { 
+
+    const offresFiltrees = search
+      ? offresAvecDetails.filter((offre) => {
+          const texte = [
+            offre.fiche?.intitule,
+            offre.fiche?.typeMetier,
+            offre.fiche?.missionsActivites,
+            offre.fiche?.competencesAttendues,
+            offre.organisation?.nom
+          ]
+            .filter(Boolean)
+            .join(' ')
+            .toLowerCase();
+          return texte.includes(search.toLowerCase());
+        })
+      : offresAvecDetails;
+
+    res.render('offres/list', {
       title: 'Offres d\'emploi - U-Recrut',
-      offres: offresAvecDetails 
+      offres: offresFiltrees,
+      searchQuery: search
     });
   } catch (err) {
     next(err);
@@ -55,7 +73,7 @@ router.post('/create', requireAuth, async (req, res, next) => {
       });
     }
 
-    const { intitule, typeMetier, lieuMission, rythme, fourchetteSalaire, missionsActivites, competencesAttendues } = req.body;
+    const { intitule, typeMetier, lieuMission, rythme, fourchetteSalaire, missionsActivites, competencesAttendues, pieceJointeAttendue } = req.body;
     
     // Créer la fiche poste
     const rec = await recruteur.read(req.session.user.id);
@@ -67,6 +85,7 @@ router.post('/create', requireAuth, async (req, res, next) => {
       fourchetteSalaire,
       missionsActivites,
       competencesAttendues,
+      pieceJointeAttendue,
       statutPoste: 'actif',
       sirenOrganisation: rec.sirenOrganisation
     });

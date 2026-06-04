@@ -7,6 +7,7 @@ var session = require('./session');
 
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
+var usersRouter = require('./routes/users');
 var offreRouter = require('./routes/offre');
 var candidatureRouter = require('./routes/candidature');
 var dashboardRouter = require('./routes/dashboard');
@@ -23,15 +24,22 @@ app.use(session.init());
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware pour passer user en local
 app.use(session.attachUserLocals);
 
+// Search bar query disponible dans toutes les vues
+app.use((req, res, next) => {
+  res.locals.searchQuery = req.query.search || '';
+  next();
+});
+
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/users', usersRouter);
 app.use('/offres', offreRouter);
 app.use('/candidatures', candidatureRouter);
 app.use('/dashboard', dashboardRouter);

@@ -2,33 +2,7 @@
 
 <div style="display:flex; min-height:calc(100vh - 60px);">
   <!-- Sidebar -->
-  <nav style="width:220px; flex-shrink:0; background:#fff; border-right:1px solid #EAECEF; padding:20px 0; display:flex; flex-direction:column;">
-    <div style="padding:16px 20px; border-bottom:1px solid #EAECEF; margin-bottom:10px;">
-      <p style="font-size:0.75rem; color:#9CA3AF; text-transform:uppercase; letter-spacing:1.5px; font-weight:600; margin:0;">Espace Recruteur</p>
-    </div>
-    
-    <a href="/dashboard/recruteur" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:600; color:#6B7280; border-left:3px solid transparent; text-decoration:none; transition:all 0.15s;"
-       onmouseover="this.style.background='#FFFBEB'; this.style.color='#4D4D4D';"
-       onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
-      <span>⚙️</span>Tableau de bord
-    </a>
-    <a href="/candidatures/received" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:700; color:#2C2C2C; border-left:3px solid #FFCD00; background:#FFFBEB; text-decoration:none;">
-      <span>📬</span>Candidatures reçues
-    </a>
-    <a href="/offres/create" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:600; color:#6B7280; border-left:3px solid transparent; text-decoration:none; transition:all 0.15s;"
-       onmouseover="this.style.background='#FFFBEB'; this.style.color='#4D4D4D';"
-       onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
-      <span>➕</span>Créer une offre
-    </a>
-    
-    <div style="margin-top:auto; padding:16px 20px; border-top:1px solid #EAECEF;">
-      <a href="/auth/logout" style="display:block; padding:10px 14px; background:transparent; color:#9F1239; border:1.5px solid #FFF1F2; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer; text-align:center; text-decoration:none; transition:all 0.15s;"
-         onmouseover="this.style.background='#FFF1F2';"
-         onmouseout="this.style.background='transparent';">
-        🚪 Déconnexion
-      </a>
-    </div>
-  </nav>
+  <%- include('../partials/recruteur_sidebar', { activePage: 'candidatures-received' }) %>
 
   <!-- Main -->
   <main style="flex:1; padding:30px; overflow-y:auto; background:#F8F9FA;">
@@ -58,6 +32,7 @@
           <tr style="border-bottom:2px solid #EAECEF; background:#F8F9FA;">
             <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">Candidat</th>
             <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">Offre</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">Document</th>
             <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">Date</th>
             <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">État</th>
             <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px;">Actions</th>
@@ -91,6 +66,17 @@
                 <a href="/offres/<%= cand.offre?.idOffre %>" style="color:#FFCD00; text-decoration:none; font-weight:600;">
                   <%= cand.fiche?.intitule || 'Offre' %>
                 </a>
+              </td>
+
+              <!-- Document -->
+              <td style="padding:16px; font-size:0.86rem; color:#4D4D4D; vertical-align:middle;">
+                <% if (cand.document && cand.document.cheminStockage) { %>
+                  <a href="<%= cand.document.cheminStockage %>" target="_blank" rel="noreferrer noopener" style="color:#1D4ED8; text-decoration:none; font-weight:700;">
+                    <%= cand.document.nomFichier || 'Voir document' %>
+                  </a>
+                <% } else { %>
+                  <span style="color:#9CA3AF;">Aucun document</span>
+                <% } %>
               </td>
 
               <!-- Date -->

@@ -1,0 +1,28 @@
+<nav style="width:220px; flex-shrink:0; background:#fff; border-right:1px solid #EAECEF; padding:20px 0; display:flex; flex-direction:column;">
+  <div style="padding:16px 20px; border-bottom:1px solid #EAECEF; margin-bottom:10px;">
+    <p style="font-size:0.75rem; color:#9CA3AF; text-transform:uppercase; letter-spacing:1.5px; font-weight:600; margin:0;">Espace Recruteur</p>
+  </div>
+
+  <% const linkBase = 'display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; text-decoration:none;'; %>
+  <% const activeStyle = linkBase + ' font-weight:700; color:#2C2C2C; border-left:3px solid #FFCD00; background:#FFFBEB;'; %>
+  <% const inactiveStyle = linkBase + ' font-weight:600; color:#6B7280; border-left:3px solid transparent;'; %>
+
+  <a href="/dashboard/recruteur" style="<%= activePage === 'dashboard' ? activeStyle : inactiveStyle %>">
+    <span>⚙️</span>Tableau de bord
+  </a>
+  <a href="/candidatures/received" style="<%= activePage === 'candidatures-received' ? activeStyle : inactiveStyle %>">
+    <span>📬</span>Candidatures reçues
+  </a>
+  <a href="/dashboard/recruteur/offres-organisation" style="<%= activePage === 'organisation-offres' ? activeStyle : inactiveStyle %>">
+    <span>🏢</span>Offres organisation
+  </a>
+  <a href="/offres/create" style="<%= activePage === 'create-offre' ? activeStyle : inactiveStyle %>">
+    <span>➕</span>Créer une offre
+  </a>
+
+  <div style="margin-top:auto; padding:16px 20px; border-top:1px solid #EAECEF;">
+    <a href="/auth/logout" style="display:block; padding:10px 14px; background:transparent; color:#9F1239; border:1.5px solid #FFF1F2; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer; text-align:center; text-decoration:none; transition:all 0.15s;">
+      🚪 Déconnexion
+    </a>
+  </div>
+</nav>

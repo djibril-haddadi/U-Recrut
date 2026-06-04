@@ -22,14 +22,14 @@
        onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
       <span>🏢</span>Organisations
     </a>
-    <a href="/admin/recruteurs" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:700; color:#2C2C2C; border-left:3px solid #FFCD00; background:#FFFBEB; text-decoration:none;">
-      <span>👥</span>Recruteurs
-    </a>
-    <a href="/admin/demandes-recruteurs" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:600; color:#6B7280; border-left:3px solid transparent; text-decoration:none; transition:all 0.15s;"
+    <a href="/admin/recruteurs" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:600; color:#6B7280; border-left:3px solid transparent; text-decoration:none; transition:all 0.15s;"
        onmouseover="this.style.background='#FFFBEB'; this.style.color='#4D4D4D';"
        onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
-      <span>📬</span>Demandes recruteurs
+      <span>👥</span>Recruteurs
     </a>
++    <a href="/admin/demandes-recruteurs" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:700; color:#2C2C2C; border-left:3px solid #FFCD00; background:#FFFBEB; text-decoration:none;">
++      <span>📬</span>Demandes recruteurs
++    </a>
     <a href="/admin/offres" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:600; color:#6B7280; border-left:3px solid transparent; text-decoration:none; transition:all 0.15s;"
        onmouseover="this.style.background='#FFFBEB'; this.style.color='#4D4D4D';"
        onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
@@ -52,12 +52,12 @@
     </a>
 
     <h1 style="font-size:2rem; font-weight:900; color:#2C2C2C; margin-bottom:24px;">
-      👥 Recruteurs
+      📬 Demandes de création recruteur
     </h1>
 
-  <% if (recruteurs.length === 0) { %>
+  <% if (demandes.length === 0) { %>
     <div style="background:#fff; border-radius:12px; border:1px dashed #EAECEF; padding:60px 40px; text-align:center;">
-      <p style="color:#9CA3AF; font-size:1rem;">Aucun recruteur enregistré</p>
+      <p style="color:#9CA3AF; font-size:1rem;">Aucune demande en attente</p>
     </div>
   <% } else { %>
     <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.05);">
@@ -65,32 +65,35 @@
         <thead>
           <tr style="border-bottom:2px solid #EAECEF; background:#F8F9FA;">
             <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">ID</th>
-            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Recruteur</th>
-            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Email</th>
-            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Organisation</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Demandeur</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Organisation (SIREN)</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Date</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Statut</th>
+            <th style="padding:16px; text-align:left; font-size:0.72rem; font-weight:700; color:#9CA3AF; text-transform:uppercase;">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <% recruteurs.forEach(rec => { %>
-            <tr style="border-bottom:1px solid #F3F4F6;"
-                onmouseover="this.style.background='#FFFBEB';"
-                onmouseout="this.style.background='transparent';">
-              <td style="padding:16px; font-size:0.85rem; color:#4D4D4D;"><%= rec.idRecruteur %></td>
+          <% demandes.forEach(d => { %>
+            <tr style="border-bottom:1px solid #F3F4F6;" onmouseover="this.style.background='#FFFBEB';" onmouseout="this.style.background='transparent';">
+              <td style="padding:16px; font-size:0.85rem; color:#4D4D4D;"><%= d.idDemandeRecruteur %></td>
+              <td style="padding:16px; font-size:0.85rem; color:#4D4D4D;"><strong><%= d.user?.prenom %> <%= d.user?.nom %></strong><br/><span style="color:#6B7280;"><%= d.user?.email %></span></td>
+              <td style="padding:16px; font-size:0.85rem; color:#4D4D4D;"><%= d.organisation ? d.organisation.nom + ' (' + d.sirenOrganisation + ')' : d.sirenOrganisation %></td>
+              <td style="padding:16px; font-size:0.85rem; color:#6B7280;"><%= d.dateDemande ? d.dateDemande.toString().slice(0,10) : '' %></td>
+              <td style="padding:16px; font-size:0.85rem; color:#4D4D4D;"><%= d.statutDemande %></td>
               <td style="padding:16px; font-size:0.85rem; color:#4D4D4D;">
-                <strong><%= rec.user?.prenom %> <%= rec.user?.nom %></strong>
-              </td>
-              <td style="padding:16px; font-size:0.85rem; color:#6B7280;"><%= rec.user?.email %></td>
-              <td style="padding:16px; font-size:0.85rem; color:#4D4D4D;">
-                <% if (rec.organisation) { %>
-                  <span style="padding:4px 10px; background:#FFFBEB; border-radius:6px; font-size:0.75rem;">
-                    <%= rec.organisation.nom %>
-                  </span>
+                <% if (d.statutDemande === 'en_attente') { %>
+                  <form method="post" action="/admin/demandes-recruteurs/<%= d.idDemandeRecruteur %>/accept" style="display:inline-block; margin-right:8px;">
+                    <button style="padding:8px 10px; background:#10B981; color:#fff; border-radius:8px; border:none; cursor:pointer;">Accepter</button>
+                  </form>
+                  <form method="post" action="/admin/demandes-recruteurs/<%= d.idDemandeRecruteur %>/reject" style="display:inline-block;">
+                    <button style="padding:8px 10px; background:#EF4444; color:#fff; border-radius:8px; border:none; cursor:pointer;">Refuser</button>
+                  </form>
                 <% } else { %>
-                  <span style="color:#9CA3AF;">Non assignée</span>
+                  <span style="color:#9CA3AF;"><%= d.statutDemande %></span>
                 <% } %>
               </td>
             </tr>
-          <% }); %>
+          <% }) %>
         </tbody>
       </table>
     </div>

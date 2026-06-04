@@ -2,33 +2,7 @@
 
 <div style="display:flex; min-height:calc(100vh - 60px);">
   <!-- Sidebar -->
-  <nav style="width:220px; flex-shrink:0; background:#fff; border-right:1px solid #EAECEF; padding:20px 0; display:flex; flex-direction:column;">
-    <div style="padding:16px 20px; border-bottom:1px solid #EAECEF; margin-bottom:10px;">
-      <p style="font-size:0.75rem; color:#9CA3AF; text-transform:uppercase; letter-spacing:1.5px; font-weight:600; margin:0;">Dashboard Recruteur</p>
-    </div>
-    
-    <a href="/dashboard/recruteur" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:700; color:#2C2C2C; border-left:3px solid #FFCD00; background:#FFFBEB; text-decoration:none;">
-      <span>📊</span>Tableau de bord
-    </a>
-    <a href="/candidatures/received" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:600; color:#6B7280; border-left:3px solid transparent; text-decoration:none; transition:all 0.15s;"
-       onmouseover="this.style.background='#FFFBEB'; this.style.color='#4D4D4D';"
-       onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
-      <span>👥</span>Candidatures reçues
-    </a>
-    <a href="/offres/create" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:600; color:#6B7280; border-left:3px solid transparent; text-decoration:none; transition:all 0.15s;"
-       onmouseover="this.style.background='#FFFBEB'; this.style.color='#4D4D4D';"
-       onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
-      <span>➕</span>Créer une offre
-    </a>
-    
-    <div style="margin-top:auto; padding:16px 20px; border-top:1px solid #EAECEF;">
-      <a href="/auth/logout" style="display:block; padding:10px 14px; background:transparent; color:#9F1239; border:1.5px solid #FFF1F2; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer; text-align:center; text-decoration:none; transition:all 0.15s;"
-         onmouseover="this.style.background='#FFF1F2';"
-         onmouseout="this.style.background='transparent';">
-        🚪 Déconnexion
-      </a>
-    </div>
-  </nav>
+  <%- include('../partials/recruteur_sidebar', { activePage: 'dashboard' }) %>
 
   <!-- Main -->
   <main style="flex:1; padding:30px; overflow-y:auto; background:#F8F9FA;">
@@ -38,14 +12,16 @@
 
     <!-- Stats -->
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:32px;">
-      <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; padding:20px 22px; box-shadow:0 2px 8px rgba(0,0,0,0.04); border-left:4px solid #FFCD00;">
-        <div style="font-size:2rem; font-weight:900; color:#2C2C2C; font-family:'Outfit';">
-          <%= stats.offresTotal %>
+      <a href="/dashboard/recruteur/offres-publiees" style="text-decoration:none; color:inherit;">
+        <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; padding:20px 22px; box-shadow:0 2px 8px rgba(0,0,0,0.04); border-left:4px solid #FFCD00; transition:all 0.15s; display:block;">
+          <div style="font-size:2rem; font-weight:900; color:#2C2C2C; font-family:'Outfit';">
+            <%= stats.offresTotal %>
+          </div>
+          <div style="font-size:0.76rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px; margin-top:4px;">
+            Offres publiées
+          </div>
         </div>
-        <div style="font-size:0.76rem; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.6px; margin-top:4px;">
-          Offres publiées
-        </div>
-      </div>
+      </a>
 
       <div style="background:#fff; border-radius:12px; border:1px solid #EAECEF; padding:20px 22px; box-shadow:0 2px 8px rgba(0,0,0,0.04); border-left:4px solid #3B82F6;">
         <div style="font-size:2rem; font-weight:900; color:#2C2C2C; font-family:'Outfit';">

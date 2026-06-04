@@ -13,6 +13,11 @@ module.exports = {
     return results.length > 0 ? results[0] : null;
   },
 
+  readByCandidatureId: async (idCandidature) => {
+    const results = await query('SELECT * FROM document_candidature WHERE idCandidature = ?', [idCandidature]);
+    return results.length > 0 ? results[0] : null;
+  },
+
   readAll: async () => {
     return query('SELECT * FROM document_candidature', []);
   },

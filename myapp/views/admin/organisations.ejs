@@ -25,6 +25,11 @@
        onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
       <span>👥</span>Recruteurs
     </a>
+    <a href="/admin/demandes-recruteurs" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:600; color:#6B7280; border-left:3px solid transparent; text-decoration:none; transition:all 0.15s;"
+       onmouseover="this.style.background='#FFFBEB'; this.style.color='#4D4D4D';"
+       onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
+      <span>📬</span>Demandes recruteurs
+    </a>
     <a href="/admin/offres" style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:0.86rem; font-weight:600; color:#6B7280; border-left:3px solid transparent; text-decoration:none; transition:all 0.15s;"
        onmouseover="this.style.background='#FFFBEB'; this.style.color='#4D4D4D';"
        onmouseout="this.style.background='transparent'; this.style.color='#6B7280';">
@@ -46,9 +51,10 @@
       ← Retour à la console
     </a>
 
-    <h1 style="font-size:2rem; font-weight:900; color:#2C2C2C; margin-bottom:24px;">
-      🏢 Organisations
-    </h1>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px;">
+      <h1 style="font-size:2rem; font-weight:900; color:#2C2C2C; margin:0;">🏢 Organisations</h1>
+      <a href="/admin/organisations/new" style="padding:12px 18px; background:#FFCD00; color:#2C2C2C; border-radius:12px; text-decoration:none; font-weight:800;">Ajouter une organisation</a>
+    </div>
 
   <% if (organisations.length === 0) { %>
     <div style="background:#fff; border-radius:12px; border:1px dashed #EAECEF; padding:60px 40px; text-align:center;">
