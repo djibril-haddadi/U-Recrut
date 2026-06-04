@@ -18,8 +18,8 @@ Accédez à : **http://localhost:3000**
 - Mot de passe: `admin123`
 
 ### Candidat
-- Email: `ali@test.com`
-- Mot de passe: `mdp123`
+- Email: `jean.dupont@test.com`
+- Mot de passe: `motdepasse123`
 
 ### Recruteur
 - Email: `thomas.laurent@techcorp.com`
