@@ -27,6 +27,8 @@ Accédez à : **http://localhost:3000**
 
 Ou créez un compte en vous inscrivant via le formulaire.
 
+Via phpmyadmin : https://tuxa.sme.utc.fr/phpmyadmin 
+
 ---
 
 ## 📱 Navigation principale
