@@ -24,6 +24,11 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+// CORRECTION 2: Validation stricte des uploads
+const ALLOWED_TYPES = ['application/pdf', 'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => {
@@ -31,7 +36,23 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}_${safeName}`);
   }
 });
-const upload = multer({ storage });
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: MAX_FILE_SIZE },
+  fileFilter: (req, file, cb) => {
+    // Vérifier le type MIME
+    if (!ALLOWED_TYPES.includes(file.mimetype)) {
+      return cb(new Error('Type de fichier non autorisé. Seuls PDF, DOC et DOCX sont acceptés.'));
+    }
+    // Vérifier l'extension
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (!['.pdf', '.doc', '.docx'].includes(ext)) {
+      return cb(new Error('Extension de fichier non autorisée.'));
+    }
+    cb(null, true);
+  }
+});
 
 /* GET formulaire de candidature avec upload */
 router.get('/create/:idOffre', requireAuth, async (req, res, next) => {
@@ -70,7 +91,10 @@ router.post('/create/:idOffre', requireAuth, upload.single('document'), async (r
     );
 
     if (existing) {
-      return res.status(400).json({ error: 'Vous avez déjà postulé à cette offre' });
+      req.session.message = 'Vous avez déjà postulé à cette offre';
+      req.session.messageType = 'warning';
+      req.session.save(() => res.redirect('/offres'));
+      return;
     }
 
     // Créer la candidature
@@ -95,7 +119,9 @@ router.post('/create/:idOffre', requireAuth, upload.single('document'), async (r
       return res.json({ success: true, id: newCandidature.insertId, message: 'Candidature envoyée' });
     }
 
-    res.redirect('/candidatures');
+    req.session.message = 'Candidature envoyée avec succès!';
+    req.session.messageType = 'success';
+    req.session.save(() => res.redirect('/offres'));
   } catch (err) {
     next(err);
   }
@@ -196,9 +222,21 @@ router.put('/:id', requireAuth, async (req, res, next) => {
       return res.status(403).json({ error: 'Accès réservé aux recruteurs' });
     }
 
+    // CORRECTION 3: Vérification du propriétaire de la candidature
+    const candidatureToUpdate = await candidature.read(req.params.id);
+    if (!candidatureToUpdate) {
+      return res.status(404).json({ error: 'Candidature non trouvée' });
+    }
+
+    // Vérifier que l'offre appartient au recruteur
+    const offre = await offreEmploi.read(candidatureToUpdate.idOffre);
+    if (!offre || offre.idRecruteur !== req.session.user.id) {
+      return res.status(403).json({ error: 'Vous n\'avez pas le droit de modifier cette candidature' });
+    }
+
     const { etat } = req.body;
     await candidature.update(req.params.id, { etatCandidature: etat });
-    
+
     res.json({ success: true, message: 'Candidature mise à jour' });
   } catch (err) {
     next(err);

@@ -42,10 +42,18 @@ router.get('/', async (req, res, next) => {
         })
       : offresAvecDetails;
 
+    // Récupérer le message flash et le supprimer de la session
+    const message = req.session.message;
+    const messageType = req.session.messageType;
+    delete req.session.message;
+    delete req.session.messageType;
+
     res.render('offres/list', {
       title: 'Offres d\'emploi - U-Recrut',
       offres: offresFiltrees,
-      searchQuery: search
+      searchQuery: search,
+      message,
+      messageType
     });
   } catch (err) {
     next(err);

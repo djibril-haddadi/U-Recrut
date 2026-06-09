@@ -21,6 +21,20 @@ SET time_zone = "+00:00";
 -- Base de données : `ai16p032`
 --
 
+-- tout effacer avant de recrée les table 
+DROP TABLE IF EXISTS `administrateur`;
+DROP TABLE IF EXISTS `candidat`;
+DROP TABLE IF EXISTS `candidature`;   
+DROP TABLE IF EXISTS `demande_organisation`;
+DROP TABLE IF EXISTS `demande_recruteur`;
+DROP TABLE IF EXISTS `document_candidature`;
+DROP TABLE IF EXISTS `fiche_poste`;
+DROP TABLE IF EXISTS `offre_emploi`;
+DROP TABLE IF EXISTS `organisation`;
+DROP TABLE IF EXISTS `recruteur`;
+DROP TABLE IF EXISTS `utilisateur`;
+
+
 -- --------------------------------------------------------
 
 --
@@ -192,9 +206,9 @@ CREATE TABLE `utilisateur` (
 --
 
 INSERT INTO `utilisateur` (`idUtilisateur`, `nom`, `prenom`, `email`, `motDePasseHash`, `telephone`, `adresse`, `codePostal`, `ville`, `dateCreation`, `statutCompte`) VALUES
-(1, 'Ali', 'Ben', 'ali@test.com', 'mdp123', '0612345678', '12 rue des Fleurs', '60200', 'Lille', '2026-03-26 00:00:00', 'actif'),
-(5, 'Nadia', 'Dupont', 'nadia@test.com', 'mdp456', '0698765432', '8 avenue Victor Hugo', '75015', 'Paris', '2026-03-26 00:00:00', 'actif'),
-(6, 'Admin', 'Site', 'admin@test.com', 'admin123', '0600000000', '1 place Centrale', '59000', 'Lille', '2026-03-26 00:00:00', 'actif');
+(1, 'Ali', 'Ben', 'ali@test.com', '$2b$10$wE/EgjsQbvpv63anTgETMupPc5b4fY8wCSH7itDvfJmAk2fzkkDvK', '0612345678', '12 rue des Fleurs', '60200', 'Lille', '2026-03-26 00:00:00', 'actif'),
+(5, 'Nadia', 'Dupont', 'nadia@test.com', '$2b$10$5ymFuL.NyrjfYMNu2Qj1oukmrNTrgV8nyK6ggWIovnS4FgBtaZCCK', '0698765432', '8 avenue Victor Hugo', '75015', 'Paris', '2026-03-26 00:00:00', 'actif'),
+(6, 'Admin', 'Site', 'admin@test.com', '$2b$10$u6sx1ueWYgiIjdFZ9Ic6F.GMjPdJ6NfeoAwBKRskfrqvjzlPBkodO', '0600000000', '1 place Centrale', '59000', 'Lille', '2026-03-26 00:00:00', 'actif');
 
 --
 -- Index pour les tables déchargées

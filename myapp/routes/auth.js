@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var bcrypt = require('bcrypt');
+var rateLimit = require('express-rate-limit');
 var utilisateur = require('../model/utilisateur');
 var candidat = require('../model/candidat');
 var recruteur = require('../model/recruteur');
@@ -8,22 +10,32 @@ var demandeRecruteur = require('../model/demande_recruteur');
 var organisationModel = require('../model/organisation');
 var session = require('../session');
 
+// CORRECTION 1: Rate limiting pour prévenir les attaques par force brute
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 tentatives par IP
+  message: 'Trop de tentatives de connexion. Veuillez réessayer plus tard.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 /* GET login page */
 router.get('/login', (req, res) => {
   res.render('auth/login', { title: 'Connexion - U-Recrut' });
 });
 
 /* POST login */
-router.post('/login', async (req, res, next) => {
+router.post('/login', loginLimiter, async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const users = await utilisateur.readAll();
-    const user = users.find(u => u.email === email && u.motDePasseHash === password);
-    
-    if (!user) {
-      return res.render('auth/login', { 
+    const user = users.find(u => u.email === email);
+
+    // CORRECTION 1: Comparaison sécurisée du mot de passe avec bcrypt
+    if (!user || !await bcrypt.compare(password, user.motDePasseHash)) {
+      return res.render('auth/login', {
         title: 'Connexion - U-Recrut',
-        error: 'Email ou mot de passe incorrect' 
+        error: 'Email ou mot de passe incorrect'
       });
     }
 
@@ -123,11 +135,12 @@ router.post('/register', async (req, res, next) => {
     }
 
     // Créer l'utilisateur
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await utilisateur.create({
       nom,
       prenom,
       email,
-      motDePasseHash: password,
+      motDePasseHash: hashedPassword,
       dateCreation: new Date(),
       statutCompte: role === 'recruteur' ? 'en_attente' : 'actif'
     });

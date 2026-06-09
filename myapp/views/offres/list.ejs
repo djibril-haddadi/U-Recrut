@@ -4,6 +4,14 @@
   <h1 style="font-size:2rem; font-weight:900; color:#2C2C2C; margin-bottom:24px;">
     📋 <%= title || 'Toutes les offres d\'emploi' %>
   </h1>
+
+  <% if (message) { %>
+    <div style="margin-bottom:20px; padding:16px 20px; border-radius:8px; font-weight:600; display:flex; justify-content:space-between; align-items:center;
+      <%= messageType === 'success' ? 'background:#ECFDF5; border:1px solid #DBEAFE; color:#065F46;' : 'background:#FEF3C7; border:1px solid #FBBF24; color:#92400E;' %>">
+      <span><%= message %></span>
+      <button onclick="this.parentElement.style.display='none';" style="background:none; border:none; font-size:1.5rem; cursor:pointer; opacity:0.7;">✕</button>
+    </div>
+  <% } %>
   
   <% if (offres.length === 0) { %>
     <div style="background:#fff; border-radius:12px; border:1px dashed #EAECEF; padding:60px 40px; text-align:center;">

@@ -60,11 +60,12 @@ router.post('/', async function(req, res, next) {
       });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await userModel.create({
       nom,
       prenom,
       email,
-      motDePasseHash: password,
+      motDePasseHash: hashedPassword,
       dateCreation: new Date(),
       statutCompte: role === 'recruteur' ? 'en_attente' : 'actif'
     });
