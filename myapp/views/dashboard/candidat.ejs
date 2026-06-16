@@ -88,10 +88,10 @@
                 Publiée le <%= new Date(offre.datePublication).toLocaleDateString('fr-FR') %>
               </p>
             </div>
-            <a href="/candidatures" style="display:inline-block; padding:6px 12px; background:#FFCD00; color:#2C2C2C; text-decoration:none; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer; transition:all 0.18s;"
+            <a href="/offres/<%= offre.idOffre %>" style="display:inline-block; padding:6px 12px; background:#FFCD00; color:#2C2C2C; text-decoration:none; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer; transition:all 0.18s;"
                onmouseover="this.style.background='#F5C200';"
                onmouseout="this.style.background='#FFCD00';">
-              Voir mes candidatures
+              Voir offre
             </a>
           </div>
         <% }); %>
