@@ -5,6 +5,8 @@ var fichePoste = require('../model/fiche_poste');
 var recruteur = require('../model/recruteur');
 var organisation = require('../model/organisation');
 var utilisateur = require('../model/utilisateur');
+var candidature = require('../model/candidature');
+var candidat = require('../model/candidat');
 
 // Middleware : vérifier l'authentification
 const requireAuth = (req, res, next) => {
@@ -18,12 +20,24 @@ const requireAuth = (req, res, next) => {
 router.get('/', async (req, res, next) => {
   try {
     const search = (req.query.search || '').trim();
+
+    let appliedOfferIds = new Set();
+    if (req.session.user && req.session.user.role === 'candidat') {
+      const candRow = await candidat.read(req.session.user.id);
+      if (candRow) {
+        const candidatures = await candidature.readAll();
+        candidatures
+          .filter(c => c.idCandidat === candRow.idCandidat)
+          .forEach(c => appliedOfferIds.add(c.idOffre));
+      }
+    }
+
     const offres = await offreEmploi.readAll();
     const offresAvecDetails = await Promise.all(offres.map(async (offre) => {
       const fiche = await fichePoste.read(offre.idFichePoste);
       const rec = await recruteur.read(offre.idRecruteur);
       const org = rec ? await organisation.read(rec.sirenOrganisation) : null;
-      return { ...offre, fiche, organisation: org };
+      return { ...offre, fiche, organisation: org, dejaPostule: appliedOfferIds.has(offre.idOffre) };
     }));
 
     const offresFiltrees = search
@@ -130,7 +144,18 @@ router.get('/:id', async (req, res, next) => {
     const user = rec ? await utilisateur.read(rec.idRecruteur) : null;
     const org = rec ? await organisation.read(rec.sirenOrganisation) : null;
 
-    offre = { ...offre, fiche, recruteur: user, organisation: org };
+    let dejaPostule = false;
+    if (req.session.user && req.session.user.role === 'candidat') {
+      const candRow = await candidat.read(req.session.user.id);
+      if (candRow) {
+        const candidatures = await candidature.readAll();
+        dejaPostule = candidatures.some(c => 
+          c.idCandidat === candRow.idCandidat && c.idOffre === parseInt(req.params.id, 10)
+        );
+      }
+    }
+
+    offre = { ...offre, fiche, recruteur: user, organisation: org, dejaPostule };
 
     res.render('offres/detail', { 
       title: offre.fiche?.intitule + ' - U-Recrut',

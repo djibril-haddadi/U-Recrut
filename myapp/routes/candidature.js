@@ -61,6 +61,22 @@ router.get('/create/:idOffre', requireAuth, async (req, res, next) => {
       return res.status(403).render('error', { message: 'Accès réservé aux candidats', error: {} });
     }
 
+    const candRow = await candidat.read(req.session.user.id);
+    if (!candRow) {
+      return res.status(400).render('error', { message: 'Profil candidat non trouvé', error: {} });
+    }
+
+    const candidatures = await candidature.readAll();
+    const existing = candidatures.find(c => 
+      c.idCandidat === candRow.idCandidat && c.idOffre === parseInt(req.params.idOffre, 10)
+    );
+
+    if (existing) {
+      req.session.message = 'Vous avez déjà postulé à cette offre';
+      req.session.messageType = 'warning';
+      return req.session.save(() => res.redirect('/offres'));
+    }
+
     res.render('candidatures/create', {
       title: 'Postuler à une offre - U-Recrut',
       idOffre: req.params.idOffre

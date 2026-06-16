@@ -72,11 +72,17 @@
               Voir détail
             </a>
             <% if (user && user.role === 'candidat') { %>
-              <a href="/candidatures/create/<%= offre.idOffre %>" style="flex:1; display:inline-flex; justify-content:center; padding:10px 14px; background:#FFCD00; color:#2C2C2C; text-decoration:none; border-radius:8px; font-size:0.8rem; font-weight:700; cursor:pointer; transition:all 0.18s; font-family:'Outfit';"
-                 onmouseover="this.style.background='#F5C200';"
-                 onmouseout="this.style.background='#FFCD00';">
-                Postuler
-              </a>
+              <% if (offre.dejaPostule) { %>
+                <div style="flex:1; display:inline-flex; justify-content:center; align-items:center; padding:10px 14px; background:#F3F4F6; color:#6B7280; border-radius:8px; font-size:0.8rem; font-weight:700; font-family:'Outfit';">
+                  Déjà postulé
+                </div>
+              <% } else { %>
+                <a href="/candidatures/create/<%= offre.idOffre %>" style="flex:1; display:inline-flex; justify-content:center; padding:10px 14px; background:#FFCD00; color:#2C2C2C; text-decoration:none; border-radius:8px; font-size:0.8rem; font-weight:700; cursor:pointer; transition:all 0.18s; font-family:'Outfit';"
+                   onmouseover="this.style.background='#F5C200';"
+                   onmouseout="this.style.background='#FFCD00';">
+                  Postuler
+                </a>
+              <% } %>
             <% } %>
           </div>
         </div>
