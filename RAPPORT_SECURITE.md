@@ -64,7 +64,7 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}_${safeName}`);
   }
 });
-const upload = multer({ storage }); // ❌ Pas de validation de type/taille
+const upload = multer({ storage }); 
 ```
 
 ### 2.3 Exploitation
@@ -111,7 +111,6 @@ router.put('/:id', requireAuth, async (req, res, next) => {
     if (req.session.user.role !== 'recruteur') {
       return res.status(403).json({ error: 'Accès réservé aux recruteurs' });
     }
-    // ❌ On ne vérifie PAS si la candidature appartient au recruteur!
     const { etat } = req.body;
     await candidature.update(req.params.id, { etatCandidature: etat });
 ```
@@ -159,7 +158,6 @@ curl -X POST http://localhost:3000/candidatures/create/1 \
 
 # Accéder au fichier uploadé
 curl http://localhost:3000/uploads/shell.php?cmd=whoami
-# Retourne l'utilisateur du serveur! ❌
 ```
 
 ### Test 3: Accès non autorisé aux candidatures
@@ -169,7 +167,6 @@ curl http://localhost:3000/uploads/shell.php?cmd=whoami
 curl -X PUT http://localhost:3000/candidatures/999 \
   -H "Content-Type: application/json" \
   -d '{"etat":"acceptée"}' \
-# Réussit même si la candidature ne lui appartient pas! ❌
 ```
 
 ---

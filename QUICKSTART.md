@@ -153,4 +153,3 @@ En cas de problème :
 
 ---
 
-**Bonne utilisation ! 🎉**
