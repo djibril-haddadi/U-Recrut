@@ -1,46 +1,126 @@
 /**
- * Test (a) - OBLIGATOIRE: Vérification des sessions et droits d'accès
+ * Access-control tests for U-Recrut
  *
- * Objectif: S'assurer qu'un utilisateur authentifié mais non autorisé
- * ne peut pas accéder à des routes réservées à l'administration.
+ * Uses Supertest + mocked models so tests run without the UTC MySQL host.
  */
 
-describe('Vérification des sessions et droits d\'accès', () => {
+jest.mock('../model/utilisateur');
+jest.mock('../model/candidat');
+jest.mock('../model/recruteur');
+jest.mock('../model/administrateur');
+jest.mock('../model/candidature');
+jest.mock('../model/offre_emploi');
+jest.mock('../model/fiche_poste');
+jest.mock('../model/organisation');
+jest.mock('../model/demande_recruteur');
 
-  test('Un utilisateur non authentifié est redirigé vers /auth/login', () => {
-    // Simulate non-authenticated user trying to access admin panel
-    // Expected: 302 redirect to /auth/login
-    expect(true).toBe(true);
+const request = require('supertest');
+const utilisateur = require('../model/utilisateur');
+const candidat = require('../model/candidat');
+const recruteur = require('../model/recruteur');
+const administrateur = require('../model/administrateur');
+const candidature = require('../model/candidature');
+const offreEmploi = require('../model/offre_emploi');
+const { buildUser } = require('./helpers/users');
+
+process.env.SESSION_SECRET = 'test-secret';
+process.env.LOGIN_MAX_ATTEMPTS = '100';
+
+const app = require('../app');
+
+async function loginAs(agent, user, role) {
+  utilisateur.readAll.mockResolvedValue([user]);
+  candidat.readAll.mockResolvedValue(role === 'candidat' ? [{ idCandidat: user.idUtilisateur }] : []);
+  recruteur.readAll.mockResolvedValue(role === 'recruteur' ? [{ idRecruteur: user.idUtilisateur }] : []);
+  administrateur.readAll.mockResolvedValue(
+    role === 'admin' ? [{ idAdministrateur: user.idUtilisateur }] : []
+  );
+
+  // Dashboard / admin may load related collections after redirect — keep safe defaults
+  candidature.readAll.mockResolvedValue([]);
+  offreEmploi.readAll.mockResolvedValue([]);
+
+  const res = await agent
+    .post('/auth/login')
+    .type('form')
+    .send({ email: user.email, password: user.password })
+    .redirects(0);
+
+  expect(res.status).toBe(302);
+  return res;
+}
+
+describe('U-Recrut access control', () => {
+  test('unauthenticated user is redirected to login on /dashboard/candidat', async () => {
+    const res = await request(app).get('/dashboard/candidat').redirects(0);
+
+    expect(res.status).toBe(302);
+    expect(res.headers.location).toBe('/auth/login');
   });
 
-  test('Un candidat ne peut pas accéder à /admin/users', () => {
-    // Un candidat authentifié essaie d'accéder au panel admin
-    // Le middleware requireAdmin doit rejeter avec 403
-    expect(true).toBe(true);
+  test('unauthenticated user cannot open admin users page', async () => {
+    const res = await request(app).get('/admin/users');
+
+    expect(res.status).toBe(403);
+    expect(res.text).toMatch(/administrateurs/i);
   });
 
-  test('Un candidat ne peut pas accéder à /dashboard/admin', () => {
-    // Vérification dans dashboard.js que le rôle est 'admin'
-    // Sinon retour 403
-    expect(true).toBe(true);
+  test('candidate cannot access /admin/users', async () => {
+    const user = await buildUser({ email: 'candidate@test.com', role: 'candidat' });
+    const agent = request.agent(app);
+    await loginAs(agent, user, 'candidat');
+
+    const res = await agent.get('/admin/users');
+
+    expect(res.status).toBe(403);
+    expect(res.text).toMatch(/administrateurs/i);
   });
 
-  test('Un recruteur ne peut pas accéder au dashboard candidat', () => {
-    // Vérification que req.session.user.role === 'candidat'
-    // Sinon retour 403
-    expect(true).toBe(true);
+  test('candidate cannot access /dashboard/admin', async () => {
+    const user = await buildUser({ email: 'candidate2@test.com', role: 'candidat' });
+    const agent = request.agent(app);
+    await loginAs(agent, user, 'candidat');
+
+    // Avoid DB work if handler continues past role check
+    candidat.readAll.mockResolvedValue([{ idCandidat: user.idUtilisateur }]);
+
+    const res = await agent.get('/dashboard/admin');
+
+    expect(res.status).toBe(403);
+    expect(res.text).toMatch(/admin/i);
   });
 
-  test('Un candidat authentifié peut accéder à /dashboard/candidat', () => {
-    // Un candidat avec session valide peut voir son dashboard
-    expect(true).toBe(true);
+  test('recruiter cannot access candidate dashboard', async () => {
+    const user = await buildUser({
+      id: 2,
+      email: 'recruiter@test.com',
+      role: 'recruteur',
+    });
+    const agent = request.agent(app);
+    await loginAs(agent, user, 'recruteur');
+
+    const res = await agent.get('/dashboard/candidat');
+
+    expect(res.status).toBe(403);
+    expect(res.text).toMatch(/candidats/i);
   });
 
-  test('Un recruteur ne peut modifier que ses propres candidatures', () => {
-    // Recruteur A ne peut pas modifier candidature d'une autre org
-    // Vérification: offre.idRecruteur === req.session.user.id
-    // Sinon retour 403
-    expect(true).toBe(true);
-  });
+  test('candidate can open /dashboard/candidat', async () => {
+    const user = await buildUser({
+      id: 3,
+      email: 'ok-candidate@test.com',
+      role: 'candidat',
+    });
+    const agent = request.agent(app);
+    await loginAs(agent, user, 'candidat');
 
+    candidat.readAll.mockResolvedValue([{ idCandidat: user.idUtilisateur }]);
+    candidature.readAll.mockResolvedValue([]);
+    offreEmploi.readAll.mockResolvedValue([]);
+
+    const res = await agent.get('/dashboard/candidat');
+
+    expect(res.status).toBe(200);
+    expect(res.text).toMatch(/Tableau de bord|U-Recrut|candidat/i);
+  });
 });

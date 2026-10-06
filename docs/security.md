@@ -14,13 +14,17 @@ This project includes a short security hardening track (course module). Focus is
 
 ## Automated tests
 
-```bash
-cd app && npm test
-```
+Security-focused tests use **Jest + Supertest** with mocked models (no UTC DB required):
 
-- `tests/access-control.test.js`  
-- `tests/sql-injection.test.js`  
-- `tests/brute-force.test.js`  
+- access control (roles / redirects / 403)
+- login SQL-injection payloads rejected
+- brute-force rate limiting (HTTP 429)
+- session helper unit checks
+
+```bash
+cd app
+npm test
+```
 
 ## Important
 

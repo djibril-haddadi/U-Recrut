@@ -42,6 +42,21 @@ U-Recrut/
 
 ---
 
+## Demo / database note
+
+There is **no public live demo**. The course database was hosted on the UTC MySQL server and may no longer be available.
+
+To run locally:
+
+1. Create a MySQL database  
+2. Import `app/model/data/schema.sql` then `app/model/data/seed.sql`  
+3. Configure `app/.env` from `.env.example`  
+4. `cd app && npm install && npm start`
+
+Automated tests **do not need** that remote database: they mock the data layer and exercise HTTP behavior with Jest + Supertest.
+
+---
+
 ## Quick start
 
 ### Requirements
@@ -75,7 +90,8 @@ cd app
 npm test
 ```
 
-Security-focused tests cover access control, SQL injection patterns, and brute-force / rate limiting behavior.
+**15 tests** (Jest + Supertest): access control, SQL-injection login payloads, brute-force 429, session helpers.  
+They mock the MySQL layer, so they run **without** the UTC database.
 
 ---
 

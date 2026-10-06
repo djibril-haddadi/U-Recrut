@@ -1,44 +1,58 @@
 /**
- * Test (b) - Simulation d'attaque par force brute
+ * Brute-force protection on login (U-Recrut)
  *
- * Objectif: Vérifier qu'un mécanisme de limitation des tentatives
- * de connexion échouées est bien en place.
- *
- * Après 5 tentatives échouées, la connexion doit être bloquée pendant 15 minutes.
+ * express-rate-limit is configured on POST /auth/login.
+ * Tests load the app with a low max so they stay fast.
  */
 
-describe('Protection contre les attaques par force brute', () => {
+jest.mock('../model/utilisateur');
+jest.mock('../model/candidat');
+jest.mock('../model/recruteur');
+jest.mock('../model/administrateur');
 
-  test('Après 5 tentatives échouées, la connexion est bloquée (HTTP 429)', () => {
-    // Simulation de 5 tentatives échouées
-    // Le middleware loginLimiter (express-rate-limit) doit rejeter la 6ème
-    // avec HTTP 429: Too Many Requests
-    expect(true).toBe(true);
+process.env.SESSION_SECRET = 'test-secret';
+process.env.LOGIN_MAX_ATTEMPTS = '5';
+process.env.LOGIN_WINDOW_MS = String(15 * 60 * 1000);
+
+const request = require('supertest');
+const utilisateur = require('../model/utilisateur');
+const candidat = require('../model/candidat');
+const recruteur = require('../model/recruteur');
+const administrateur = require('../model/administrateur');
+
+const app = require('../app');
+
+describe('U-Recrut brute-force protection', () => {
+  beforeEach(() => {
+    utilisateur.readAll.mockResolvedValue([]);
+    candidat.readAll.mockResolvedValue([]);
+    recruteur.readAll.mockResolvedValue([]);
+    administrateur.readAll.mockResolvedValue([]);
   });
 
-  test('Le message d\'erreur indique un blocage temporaire', () => {
-    // Après dépassement du limite, la réponse doit contenir:
-    // "Trop de tentatives de connexion. Veuillez réessayer plus tard."
-    expect(true).toBe(true);
-  });
+  test('returns HTTP 429 after too many failed login attempts from the same client', async () => {
+    process.env.LOGIN_MAX_ATTEMPTS = '5';
+    const agent = request.agent(app);
+    const client = 'brute-force-client-1';
 
-  test('Le compteur d\'erreurs réinitialise après une connexion réussie', () => {
-    // 3 tentatives échouées
-    // 1 tentative réussie
-    // Compteur réinitialisé, nouvelles 5 tentatives possibles
-    expect(true).toBe(true);
-  });
+    for (let i = 0; i < 5; i += 1) {
+      const res = await agent
+        .post('/auth/login')
+        .set('X-Test-Client', client)
+        .type('form')
+        .send({ email: 'attacker@test.com', password: `wrong-${i}` });
 
-  test('Le rate limiting s\'applique par adresse IP', () => {
-    // Différentes IPs peuvent faire 5 tentatives
-    // Même IP après la 5ème sera bloquée
-    expect(true).toBe(true);
-  });
+      expect(res.status).toBe(200);
+      expect(res.text).toMatch(/Email ou mot de passe incorrect/i);
+    }
 
-  test('Le délai de déblocage est de 15 minutes', () => {
-    // Après blocage, attendre 15min permet une nouvelle tentative
-    // express-rate-limit: windowMs: 15 * 60 * 1000
-    expect(true).toBe(true);
-  });
+    const blocked = await agent
+      .post('/auth/login')
+      .set('X-Test-Client', client)
+      .type('form')
+      .send({ email: 'attacker@test.com', password: 'wrong-final' });
 
+    expect(blocked.status).toBe(429);
+    expect(blocked.text).toMatch(/Trop de tentatives de connexion/i);
+  });
 });

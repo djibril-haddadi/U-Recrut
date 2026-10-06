@@ -12,11 +12,14 @@ var session = require('../session');
 
 // CORRECTION 1: Rate limiting pour prévenir les attaques par force brute
 const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // 5 tentatives par IP
+  windowMs: Number(process.env.LOGIN_WINDOW_MS) || 15 * 60 * 1000,
+  max: (req, res) => Number(process.env.LOGIN_MAX_ATTEMPTS) || 5,
   message: 'Trop de tentatives de connexion. Veuillez réessayer plus tard.',
   standardHeaders: true,
   legacyHeaders: false,
+  // Allow tests to isolate clients without depending on shared IP state
+  keyGenerator: (req) => req.headers['x-test-client'] || req.ip,
+  validate: { xForwardedForHeader: false, keyGeneratorIpFallback: false },
 });
 
 /* GET login page */

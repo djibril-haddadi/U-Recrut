@@ -1,54 +1,113 @@
 /**
- * Test (c) - Vérification de la résistance à l'injection SQL
+ * SQL injection resistance on login (U-Recrut)
  *
- * Objectif: Automatiser des tests qui injectent des chaînes malveillantes
- * dans les champs de saisie pour vérifier que les requêtes sont sécurisées
- * (paramétrées, préparées, etc.).
+ * Models are mocked: malicious strings must be treated as literal credentials,
+ * never as successful authentication.
  */
 
-describe('Vérification résistance à l\'injection SQL', () => {
+jest.mock('../model/utilisateur');
+jest.mock('../model/candidat');
+jest.mock('../model/recruteur');
+jest.mock('../model/administrateur');
 
-  test('Injection SQL dans le champ email du login: OR 1=1', () => {
-    // Email: admin@test.com' OR '1'='1
-    // Password: ' OR '1'='1
-    // Résultat attendu: Erreur "Email ou mot de passe incorrect"
-    // Pas de connexion réussie
-    expect(true).toBe(true);
+const request = require('supertest');
+const utilisateur = require('../model/utilisateur');
+const candidat = require('../model/candidat');
+const recruteur = require('../model/recruteur');
+const administrateur = require('../model/administrateur');
+const { buildUser } = require('./helpers/users');
+
+process.env.SESSION_SECRET = 'test-secret';
+process.env.LOGIN_MAX_ATTEMPTS = '100';
+
+const app = require('../app');
+
+describe('U-Recrut SQL injection resistance (login)', () => {
+  beforeEach(() => {
+    candidat.readAll.mockResolvedValue([]);
+    recruteur.readAll.mockResolvedValue([]);
+    administrateur.readAll.mockResolvedValue([]);
   });
 
-  test('Injection SQL: UNION SELECT', () => {
-    // Email: test@test.com' UNION SELECT * FROM utilisateur--
-    // Résultat: Les requêtes paramétrées traitent cela comme un email littéral
-    // Pas de UNION SELECT exécutée
-    expect(true).toBe(true);
+  test('OR 1=1 style payload does not authenticate', async () => {
+    const legit = await buildUser({ email: 'admin@test.com' });
+    utilisateur.readAll.mockResolvedValue([legit]);
+
+    const res = await request(app)
+      .post('/auth/login')
+      .type('form')
+      .send({
+        email: "admin@test.com' OR '1'='1",
+        password: "' OR '1'='1",
+      })
+      .redirects(0);
+
+    expect(res.status).toBe(200);
+    expect(res.text).toMatch(/Email ou mot de passe incorrect/i);
+    expect(res.headers.location).toBeUndefined();
   });
 
-  test('Injection SQL: DROP TABLE', () => {
-    // Email: test'; DROP TABLE utilisateur;--
-    // Résultat: Injection traitée comme chaîne, table reste intacte
-    // Vérifier que la table existe après la tentative
-    expect(true).toBe(true);
+  test('UNION SELECT payload is treated as a normal email string', async () => {
+    utilisateur.readAll.mockResolvedValue([]);
+
+    const res = await request(app)
+      .post('/auth/login')
+      .type('form')
+      .send({
+        email: "test@test.com' UNION SELECT * FROM utilisateur--",
+        password: 'anything',
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.text).toMatch(/Email ou mot de passe incorrect/i);
   });
 
-  test('Caractères spéciaux échappés automatiquement par mysql', () => {
-    // Les paramètres (?) dans les requêtes SQL sont automatiquement
-    // échappés par la bibliothèque mysql
-    // Les guillemets, points-virgules, etc. sont traités comme des caractères
-    expect(true).toBe(true);
+  test('DROP TABLE payload does not authenticate', async () => {
+    const user = await buildUser({ email: 'safe@test.com' });
+    utilisateur.readAll.mockResolvedValue([user]);
+
+    const res = await request(app)
+      .post('/auth/login')
+      .type('form')
+      .send({
+        email: "test'; DROP TABLE utilisateur;--",
+        password: user.password,
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.text).toMatch(/Email ou mot de passe incorrect/i);
   });
 
-  test('Tentative d\'injection dans champ mot de passe rejetée', () => {
-    // Email: user@test.com
-    // Password: ' OR 'a'='a
-    // Ne doit pas se connecter (password ne match pas)
-    expect(true).toBe(true);
+  test('special characters in password do not bypass bcrypt compare', async () => {
+    const user = await buildUser({ email: 'user@test.com' });
+    utilisateur.readAll.mockResolvedValue([user]);
+
+    const res = await request(app)
+      .post('/auth/login')
+      .type('form')
+      .send({
+        email: 'user@test.com',
+        password: "' OR 'a'='a",
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.text).toMatch(/Email ou mot de passe incorrect/i);
   });
 
-  test('Injection SQL complexe bloquée', () => {
-    // Email: ' OR 1=1; DELETE FROM utilisateur WHERE '1'='1
-    // Résultat: Impossible de se connecter
-    // Table utilisateur intacte
-    expect(true).toBe(true);
-  });
+  test('valid credentials still work (sanity check)', async () => {
+    const user = await buildUser({ email: 'ok@test.com', role: 'candidat' });
+    utilisateur.readAll.mockResolvedValue([user]);
+    candidat.readAll.mockResolvedValue([{ idCandidat: user.idUtilisateur }]);
+    recruteur.readAll.mockResolvedValue([]);
+    administrateur.readAll.mockResolvedValue([]);
 
+    const res = await request(app)
+      .post('/auth/login')
+      .type('form')
+      .send({ email: user.email, password: user.password })
+      .redirects(0);
+
+    expect(res.status).toBe(302);
+    expect(res.headers.location).toBe('/dashboard/candidat');
+  });
 });
