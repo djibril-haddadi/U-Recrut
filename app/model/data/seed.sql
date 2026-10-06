@@ -2,7 +2,7 @@
 -- DONNÉES DE TEST - U-RECRUT APPLICATION
 -- ============================================================
 -- Script pour peupler la base de données avec des données de test
--- À exécuter APRÈS la création des tables (ai16p032.sql)
+-- À exécuter APRÈS la création des tables (schema.sql)
 -- ============================================================
 
 -- Désactiver les contraintes de clés étrangères temporairement

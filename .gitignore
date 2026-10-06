@@ -1,48 +1,34 @@
-# --- DÉPENDANCES ---
-# On ne versionne jamais les modules installés (trop lourd)
+# Dependencies
 node_modules/
-jspm_packages/
 
-# --- CONFIGURATION & SÉCURITÉ ---
-# Très important : contient tes identifiants DB (PostgreSQL)
+# Secrets
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
 
-# --- LOGS ---
-# Fichiers de suivi d'erreurs
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 logs/
 *.log
 
-# --- OS / ÉDITEURS ---
-# Fichiers spécifiques à ton système ou ton codeur (VS Code, Mac)
+# OS / IDE
 .DS_Store
 .vscode/
 .idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.swp
 
-# --- BASE DE DONNÉES ---
-# Si tu utilises SQLite pour des tests rapides (optionnel)
-*.sqlite
+# Uploads (user documents)
+app/public/uploads/*
+!app/public/uploads/.gitkeep
 
-# --- DOSSIER DE BUILD (si présent) ---
+# Build / cache
 dist/
 build/
-
-# --- node js ----
-# Fichiers de cache de npm
 .npm/
-# Fichiers de cache de yarn
 .yarn/
-# Fichiers de cache de pnpm
 .pnpm-store/
-myapp/model/ai16p032.sql
+
+# Local DB dumps (keep schema.sql / seed.sql)
+*.sqlite

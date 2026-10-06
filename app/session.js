@@ -3,10 +3,10 @@ var sessions = require('express-session');
 module.exports = {
   init: () => {
     return sessions({
-      secret: 'xxxzzzyyyaaabbbcc',
+      secret: process.env.SESSION_SECRET || 'dev-only-change-me',
       saveUninitialized: true,
-      cookie: { maxAge: 3600 * 1000 }, // 60 minutes
-      resave: false
+      cookie: { maxAge: 3600 * 1000 },
+      resave: false,
     });
   },
 
@@ -28,9 +28,4 @@ module.exports = {
   deleteSession: function (session) {
     session.destroy();
   },
-
-  attachUserLocals: function (req, res, next) {
-    res.locals.user = req.session && req.session.user ? req.session.user : null;
-    next();
-  }
 };
