@@ -1,8 +1,3 @@
-/**
- * Access-control tests for U-Recrut
- *
- * Uses Supertest + mocked models so tests run without the UTC MySQL host.
- */
 
 jest.mock('../model/utilisateur');
 jest.mock('../model/candidat');
@@ -36,7 +31,6 @@ async function loginAs(agent, user, role) {
     role === 'admin' ? [{ idAdministrateur: user.idUtilisateur }] : []
   );
 
-  // Dashboard / admin may load related collections after redirect — keep safe defaults
   candidature.readAll.mockResolvedValue([]);
   offreEmploi.readAll.mockResolvedValue([]);
 
@@ -81,7 +75,6 @@ describe('U-Recrut access control', () => {
     const agent = request.agent(app);
     await loginAs(agent, user, 'candidat');
 
-    // Avoid DB work if handler continues past role check
     candidat.readAll.mockResolvedValue([{ idCandidat: user.idUtilisateur }]);
 
     const res = await agent.get('/dashboard/admin');

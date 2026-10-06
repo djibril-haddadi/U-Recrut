@@ -24,7 +24,6 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// CORRECTION 2: Validation stricte des uploads
 const ALLOWED_TYPES = ['application/pdf', 'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -238,13 +237,11 @@ router.put('/:id', requireAuth, async (req, res, next) => {
       return res.status(403).json({ error: 'Accès réservé aux recruteurs' });
     }
 
-    // CORRECTION 3: Vérification du propriétaire de la candidature
     const candidatureToUpdate = await candidature.read(req.params.id);
     if (!candidatureToUpdate) {
       return res.status(404).json({ error: 'Candidature non trouvée' });
     }
 
-    // Vérifier que l'offre appartient au recruteur
     const offre = await offreEmploi.read(candidatureToUpdate.idOffre);
     if (!offre || offre.idRecruteur !== req.session.user.id) {
       return res.status(403).json({ error: 'Vous n\'avez pas le droit de modifier cette candidature' });

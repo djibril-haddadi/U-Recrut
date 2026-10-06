@@ -1,9 +1,3 @@
-/**
- * SQL injection resistance on login (U-Recrut)
- *
- * Models are mocked: malicious strings must be treated as literal credentials,
- * never as successful authentication.
- */
 
 jest.mock('../model/utilisateur');
 jest.mock('../model/candidat');

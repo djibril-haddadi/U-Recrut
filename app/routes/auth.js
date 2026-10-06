@@ -10,14 +10,12 @@ var demandeRecruteur = require('../model/demande_recruteur');
 var organisationModel = require('../model/organisation');
 var session = require('../session');
 
-// CORRECTION 1: Rate limiting pour prévenir les attaques par force brute
 const loginLimiter = rateLimit({
   windowMs: Number(process.env.LOGIN_WINDOW_MS) || 15 * 60 * 1000,
   max: (req, res) => Number(process.env.LOGIN_MAX_ATTEMPTS) || 5,
   message: 'Trop de tentatives de connexion. Veuillez réessayer plus tard.',
   standardHeaders: true,
   legacyHeaders: false,
-  // Allow tests to isolate clients without depending on shared IP state
   keyGenerator: (req) => req.headers['x-test-client'] || req.ip,
   validate: { xForwardedForHeader: false, keyGeneratorIpFallback: false },
 });
@@ -34,7 +32,6 @@ router.post('/login', loginLimiter, async (req, res, next) => {
     const users = await utilisateur.readAll();
     const user = users.find(u => u.email === email);
 
-    // CORRECTION 1: Comparaison sécurisée du mot de passe avec bcrypt
     if (!user || !await bcrypt.compare(password, user.motDePasseHash)) {
       return res.render('auth/login', {
         title: 'Connexion - U-Recrut',

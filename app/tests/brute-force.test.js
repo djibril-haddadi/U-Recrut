@@ -1,9 +1,3 @@
-/**
- * Brute-force protection on login (U-Recrut)
- *
- * express-rate-limit is configured on POST /auth/login.
- * Tests load the app with a low max so they stay fast.
- */
 
 jest.mock('../model/utilisateur');
 jest.mock('../model/candidat');
